@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox fx:id="contenedorPrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.francalderon.app.fotocabina.MainViewController">
+   <children>
+      <Pane fx:id="plantillaLive" prefHeight="960.0" prefWidth="700.0" />
+      <VBox fx:id="controles" alignment="CENTER" prefHeight="960.0" prefWidth="640.0" spacing="20.0" styleClass="fondo-derecho" stylesheets="@../css/estilos.css">
+         <children>
+            <Pane fx:id="contenedorCaptura" prefHeight="256.0" prefWidth="620.0">
+               <children>
+                  <Button fx:id="btnCaptura" contentDisplay="CENTER" layoutX="160.0" layoutY="24.0" mnemonicParsing="false" onAction="#onCapturaClick" prefHeight="98.0" prefWidth="313.0" styleClass="boton-fotocabina" stylesheets="@../css/estilos.css" text="SONRIE Y EMPIEZA!">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="iconoCaptura" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/camara.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </Pane>
+            <GridPane prefHeight="312.0" prefWidth="620.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="btnPlantilla" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="342.0" layoutY="17.0" mnemonicParsing="false" onAction="#onPlantillaClick" prefHeight="90.0" prefWidth="267.0" styleClass="boton-control" text="Cambiar Plantilla" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
+                           <image>
+                              <Image url="@../img/plantilla.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="btnFondo" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onFondoClick" prefHeight="90.0" prefWidth="267.0" styleClass="boton-control" text="Cambiar Fondo" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
+                           <image>
+                              <Image url="@../img/imagen.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="btnFotos" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onFotosClick" prefHeight="90.0" prefWidth="267.0" styleClass="boton-control" text="Ver fotos" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
+                           <image>
+                              <Image url="@../img/fotos.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="btnTamanio" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onTamanioClick" prefHeight="90.0" prefWidth="267.0" styleClass="boton-control" text="Cambiar Tamaño" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
+                           <image>
+                              <Image url="@../img/tamanio.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="btnImprimir" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onImprimirClick" prefHeight="90.0" prefWidth="267.0" styleClass="boton-control" text="Imprimir" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
+                           <image>
+                              <Image url="@../img/impresora.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="btnAjustes" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="320.0" layoutY="121.0" mnemonicParsing="false" onAction="#onAjustesClick" prefHeight="90.0" prefWidth="267.0" styleClass="boton-control" text="Ajustes" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="96.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
+                           <image>
+                              <Image url="@../img/ajustes.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </Button>
+               </children>
+            </GridPane>
+            <StackPane fx:id="contenedorMiniPreview" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="572.0" styleClass="mini-preview">
+               <children>
+                  <ImageView fx:id="imageMiniPreview" fitHeight="314.0" fitWidth="530.0" pickOnBounds="true" styleClass="mini-preview" />
+               </children></StackPane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" />
+         </padding>
+      </VBox>
+   </children>
+</HBox>
