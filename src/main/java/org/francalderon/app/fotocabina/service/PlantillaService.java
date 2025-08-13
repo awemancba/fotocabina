@@ -119,6 +119,7 @@ public class PlantillaService {
             cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
         }
 
+
         if (ultimaConfig.size() < 2 + cantidadFotos) {
             ultimaConfig.clear();
             cargarDatosDefault(ultimaConfig);
@@ -127,7 +128,7 @@ public class PlantillaService {
 
         List<String> configuracion = ultimaConfig.subList(0, 2);
         List<String> coordenadas = ultimaConfig.subList(2, ultimaConfig.size());
-
+      
         String tamanio = configuracion.get(1);
 
         for (int i = 0; i < cantidadFotos; i++) {
@@ -192,8 +193,4 @@ public class PlantillaService {
             ultimaConfig.add("45.0," + (200.0 * (i + 1)) + "," + "200.0");
         }
     }
-
-
-
-
 }
