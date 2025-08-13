@@ -156,14 +156,13 @@ public class PlantillaService {
             imagen.setOnMouseClicked(e -> {
                 plantilla.setImgSelected(index);
                 List<StackPane> galeria = plantilla.getGaleria();
-                int posicion = 0;
-                for (StackPane stackPane: galeria){
-                    for (Node nodo:stackPane.getChildren()){
-                        if (nodo instanceof Label){
-                            nodo.setVisible(posicion == index);
+                for (int j = 0; j < galeria.size(); j++) {
+                    StackPane stackPane = galeria.get(j);
+                    for (Node nodo : stackPane.getChildren()) {
+                        if (nodo instanceof Label) {
+                            nodo.setVisible(j == index);
                         }
                     }
-                    posicion++;
                 }
             });
 
