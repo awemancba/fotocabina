@@ -145,6 +145,7 @@ public class PlantillaService {
             double newX = Double.parseDouble(coordenada[0]);
             double newY = Double.parseDouble(coordenada[1]);
             double alto = Double.parseDouble(coordenada[2]);
+
             if (alto == 0) {
                 alto = 200.0;
             }
