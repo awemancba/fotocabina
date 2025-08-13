@@ -12,6 +12,8 @@ import org.francalderon.app.fotocabina.service.ServiceManager;
 import org.francalderon.app.fotocabina.service.WebcamService;
 import org.francalderon.app.fotocabina.utils.FullScreen;
 
+import java.io.IOException;
+
 
 public class LiveViewController {
     @FXML
@@ -26,7 +28,7 @@ public class LiveViewController {
     @FXML
     Label temporizador;
 
-    public void initialize() {
+    public void initialize() throws IOException {
         ServiceManager serviceManager = ServiceManager.getInstance();
         webcamService = serviceManager.getWebcamService();
         webcamService.setCountDownLabel(temporizador);

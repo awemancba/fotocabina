@@ -34,7 +34,7 @@ public class MainViewController {
     PlantillaService plantillaService;
     WebcamService webcamService;
 
-    public void initialize() {
+    public void initialize() throws IOException {
         ServiceManager serviceManager = ServiceManager.getInstance();
         plantilla = serviceManager.getPlantilla();
         editorImagenes = serviceManager.getEditorImagenes();

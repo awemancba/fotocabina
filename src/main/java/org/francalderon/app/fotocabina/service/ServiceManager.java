@@ -6,22 +6,13 @@ import org.francalderon.app.fotocabina.utils.EditorImagenes;
 import java.io.IOException;
 
 public class ServiceManager {
-    private static final ServiceManager instance;
+    private static ServiceManager instance;
 
     EditorImagenes editorImagenes;
     ArchivoService archivoService;
     PlantillaService plantillaService;
     Plantilla plantilla;
     WebcamService webcamService;
-
-
-    static {
-        try {
-            instance = new ServiceManager();
-        } catch (IOException e) {
-            throw new RuntimeException("Error al inicializar ServiceManager", e);
-        }
-    }
 
     private ServiceManager() throws IOException {
         editorImagenes = new EditorImagenes();
@@ -37,7 +28,10 @@ public class ServiceManager {
         webcamService.start();
     }
 
-    public static ServiceManager getInstance() {
+    public static ServiceManager getInstance() throws IOException {
+        if (instance == null){
+            instance = new ServiceManager();
+        }
         return instance;
     }
 

@@ -6,11 +6,13 @@ import javafx.scene.image.ImageView;
 import org.francalderon.app.fotocabina.service.PlantillaService;
 import org.francalderon.app.fotocabina.service.ServiceManager;
 
+import java.io.IOException;
+
 public class PlantillaViewController {
     @FXML
     PlantillaService plantillaService;
 
-    public void initialize(){
+    public void initialize() throws IOException {
         plantillaService = ServiceManager.getInstance().getPlantillaService();
     }
 

@@ -6,12 +6,14 @@ import javafx.scene.control.Label;
 import org.francalderon.app.fotocabina.service.PlantillaService;
 import org.francalderon.app.fotocabina.service.ServiceManager;
 
+import java.io.IOException;
+
 
 public class ImageControlViewController {
     @FXML
     PlantillaService plantillaService;
 
-    public void initialize(){
+    public void initialize() throws IOException {
         plantillaService = ServiceManager.getInstance().getPlantillaService();
     }
 
