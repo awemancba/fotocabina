@@ -18,7 +18,6 @@ public class ArchivoService {
 
         if (!Files.exists(file)) {
             Files.createFile(file);
-            //Files.writeString(file, "4\n10x15\n45.0,70.0,100.0\n45.0,340.0,100.0\n45.0,620.0,100.0");
         }
     }
 

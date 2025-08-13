@@ -122,7 +122,7 @@
             </GridPane>
             <StackPane fx:id="contenedorMiniPreview" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="572.0" styleClass="mini-preview">
                <children>
-                  <ImageView fx:id="imageMiniPreview" fitHeight="314.0" fitWidth="530.0" pickOnBounds="true" styleClass="mini-preview" />
+                  <ImageView fx:id="imageMiniPreview" fitHeight="314.0" fitWidth="571.0" pickOnBounds="true" styleClass="mini-preview" />
                </children></StackPane>
          </children>
          <padding>
