@@ -100,22 +100,40 @@ public class PlantillaService {
     public void cargarUltimaConfig() {
         File archivo = new File(System.getProperty("user.home") + "/.fotocabina/config.txt");
         List<String> ultimaConfig = archivoService.leerArchivo(archivo);
-        List<String> configuracion = new ArrayList<>();
-        List<String> coordenadas = new ArrayList<>();
+        int cantidadFotos;
 
-        if (ultimaConfig.isEmpty()) {
-            configuracion.add("3");
-            configuracion.add("10x15");
-            for (int i = 0; i < 3; i++) {
-                coordenadas.add("45.0," + (200.0 * (i+1)) + "," + "200.0");
-            }
-        } else {
-            configuracion = ultimaConfig.subList(0, 2);
-            coordenadas = ultimaConfig.subList(2, ultimaConfig.size());
+        if (ultimaConfig == null || ultimaConfig.size() < 2) {
+            ultimaConfig = new ArrayList<>();
+            cargarDatosDefault(ultimaConfig);
         }
 
+        try {
+            cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
+        } catch (NumberFormatException e) {
+            ultimaConfig.clear();
+            cargarDatosDefault(ultimaConfig);
+            cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
+        }
+
+        if (ultimaConfig.size() < 2 + cantidadFotos) {
+            ultimaConfig.clear();
+            cargarDatosDefault(ultimaConfig);
+            cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
+        }
+
+        List<String> configuracion = ultimaConfig.subList(0, 2);
+        List<String> coordenadas = ultimaConfig.subList(2, ultimaConfig.size());
+
+
         String tamanio = configuracion.get(1);
-        int cantidadFotos = Integer.parseInt(configuracion.getFirst());
+
+        for (String dato : configuracion) {
+            System.out.println(dato);
+        }
+
+        for (String dato : coordenadas) {
+            System.out.println(dato);
+        }
 
         for (int i = 0; i < cantidadFotos; i++) {
             StackPane imagen = crearFotoDefault();
@@ -157,6 +175,15 @@ public class PlantillaService {
         StackPane contenedor = new StackPane(foto);
         contenedor.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.3, 5, 5);");
         return contenedor;
+    }
+
+    private void cargarDatosDefault(List<String> ultimaConfig) {
+        ultimaConfig.clear();
+        ultimaConfig.add("3");
+        ultimaConfig.add("10x15");
+        for (int i = 0; i < 3; i++) {
+            ultimaConfig.add("45.0," + (200.0 * (i + 1)) + "," + "200.0");
+        }
     }
 
 
