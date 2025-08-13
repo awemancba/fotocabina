@@ -19,6 +19,10 @@ public class PlantillaService {
     private EditorImagenes editorImagenes;
     private ArchivoService archivoService;
 
+    private class Delta {
+        double x, y;
+    }
+
     public PlantillaService(ArchivoService archivoService) {
         this.archivoService = archivoService;
     }
@@ -115,6 +119,7 @@ public class PlantillaService {
             cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
         }
 
+
         if (ultimaConfig.size() < 2 + cantidadFotos) {
             ultimaConfig.clear();
             cargarDatosDefault(ultimaConfig);
@@ -123,17 +128,8 @@ public class PlantillaService {
 
         List<String> configuracion = ultimaConfig.subList(0, 2);
         List<String> coordenadas = ultimaConfig.subList(2, ultimaConfig.size());
-
-
+      
         String tamanio = configuracion.get(1);
-
-        for (String dato : configuracion) {
-            System.out.println(dato);
-        }
-
-        for (String dato : coordenadas) {
-            System.out.println(dato);
-        }
 
         for (int i = 0; i < cantidadFotos; i++) {
             StackPane imagen = crearFotoDefault();
@@ -148,6 +144,18 @@ public class PlantillaService {
 
             final int index = i;
             imagen.setOnMouseClicked(e -> plantilla.setImgSelected(index));
+
+            final Delta delta = new Delta();
+            imagen.setOnMousePressed(e2->{
+                delta.x = e2.getSceneX() - imagen.getLayoutX();
+                delta.y = e2.getSceneY() - imagen.getLayoutY();
+            });
+
+            imagen.setOnMouseDragged(e3->{
+                imagen.setLayoutX(e3.getSceneX() - delta.x);
+                imagen.setLayoutY(e3.getSceneY() - delta.y);
+            });
+
             plantilla.addImage(imagen);
             plantilla.getGaleria().add(imagen);
 
@@ -185,6 +193,4 @@ public class PlantillaService {
             ultimaConfig.add("45.0," + (200.0 * (i + 1)) + "," + "200.0");
         }
     }
-
-
 }
