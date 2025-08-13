@@ -135,9 +135,13 @@ public class PlantillaService {
             StackPane imagen = crearFotoDefault();
 
             String[] coordenada = coordenadas.get(i).split(",");
+
             double newX = Double.parseDouble(coordenada[0]);
             double newY = Double.parseDouble(coordenada[1]);
             double alto = Double.parseDouble(coordenada[2]);
+            if (alto == 0){
+                alto = 200.0;
+            }
             ((ImageView) imagen.getChildren().getFirst()).setFitHeight(alto);
             imagen.setLayoutX(newX);
             imagen.setLayoutY(newY);
