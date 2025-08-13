@@ -1,6 +1,8 @@
 package org.francalderon.app.fotocabina.service;
 
 import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -128,18 +130,23 @@ public class PlantillaService {
 
         List<String> configuracion = ultimaConfig.subList(0, 2);
         List<String> coordenadas = ultimaConfig.subList(2, ultimaConfig.size());
-      
+
         String tamanio = configuracion.get(1);
 
         for (int i = 0; i < cantidadFotos; i++) {
             StackPane imagen = crearFotoDefault();
+            Label selected = new Label("Selected");
+            selected.setStyle("-fx-text-fill: white;-fx-font-size: 32px;");
+            selected.setVisible(false);
+            imagen.getChildren().add(selected);
 
             String[] coordenada = coordenadas.get(i).split(",");
 
             double newX = Double.parseDouble(coordenada[0]);
             double newY = Double.parseDouble(coordenada[1]);
             double alto = Double.parseDouble(coordenada[2]);
-            if (alto == 0){
+
+            if (alto == 0) {
                 alto = 200.0;
             }
             ((ImageView) imagen.getChildren().getFirst()).setFitHeight(alto);
@@ -147,15 +154,26 @@ public class PlantillaService {
             imagen.setLayoutY(newY);
 
             final int index = i;
-            imagen.setOnMouseClicked(e -> plantilla.setImgSelected(index));
+            imagen.setOnMouseClicked(e -> {
+                plantilla.setImgSelected(index);
+                List<StackPane> galeria = plantilla.getGaleria();
+                for (int j = 0; j < galeria.size(); j++) {
+                    StackPane stackPane = galeria.get(j);
+                    for (Node nodo : stackPane.getChildren()) {
+                        if (nodo instanceof Label) {
+                            nodo.setVisible(j == index);
+                        }
+                    }
+                }
+            });
 
             final Delta delta = new Delta();
-            imagen.setOnMousePressed(e2->{
+            imagen.setOnMousePressed(e2 -> {
                 delta.x = e2.getSceneX() - imagen.getLayoutX();
                 delta.y = e2.getSceneY() - imagen.getLayoutY();
             });
 
-            imagen.setOnMouseDragged(e3->{
+            imagen.setOnMouseDragged(e3 -> {
                 imagen.setLayoutX(e3.getSceneX() - delta.x);
                 imagen.setLayoutY(e3.getSceneY() - delta.y);
             });
