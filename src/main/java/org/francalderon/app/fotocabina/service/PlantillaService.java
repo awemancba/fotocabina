@@ -1,7 +1,6 @@
 package org.francalderon.app.fotocabina.service;
 
 import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,6 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
+import org.francalderon.app.fotocabina.ui.events.foto.AsignadorEventosFoto;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 
 import java.io.File;
@@ -21,9 +21,7 @@ public class PlantillaService {
     private EditorImagenes editorImagenes;
     private ArchivoService archivoService;
 
-    private class Delta {
-        double x, y;
-    }
+
 
     public PlantillaService(ArchivoService archivoService) {
         this.archivoService = archivoService;
@@ -135,11 +133,6 @@ public class PlantillaService {
 
         for (int i = 0; i < cantidadFotos; i++) {
             StackPane imagen = crearFotoDefault();
-            Label selected = new Label("Selected");
-            selected.setStyle("-fx-text-fill: white;-fx-font-size: 32px;");
-            selected.setVisible(false);
-            imagen.getChildren().add(selected);
-
             String[] coordenada = coordenadas.get(i).split(",");
 
             double newX = Double.parseDouble(coordenada[0]);
@@ -153,30 +146,8 @@ public class PlantillaService {
             imagen.setLayoutX(newX);
             imagen.setLayoutY(newY);
 
-            final int index = i;
-            imagen.setOnMouseClicked(e -> {
-                plantilla.setImgSelected(index);
-                List<StackPane> galeria = plantilla.getGaleria();
-                for (int j = 0; j < galeria.size(); j++) {
-                    StackPane stackPane = galeria.get(j);
-                    for (Node nodo : stackPane.getChildren()) {
-                        if (nodo instanceof Label) {
-                            nodo.setVisible(j == index);
-                        }
-                    }
-                }
-            });
-
-            final Delta delta = new Delta();
-            imagen.setOnMousePressed(e2 -> {
-                delta.x = e2.getSceneX() - imagen.getLayoutX();
-                delta.y = e2.getSceneY() - imagen.getLayoutY();
-            });
-
-            imagen.setOnMouseDragged(e3 -> {
-                imagen.setLayoutX(e3.getSceneX() - delta.x);
-                imagen.setLayoutY(e3.getSceneY() - delta.y);
-            });
+            AsignadorEventosFoto.selected(imagen, i, plantilla);
+            AsignadorEventosFoto.arrastrarFoto(imagen);
 
             plantilla.addImage(imagen);
             plantilla.getGaleria().add(imagen);
@@ -202,7 +173,11 @@ public class PlantillaService {
         ImageView foto = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/img/fotoDefault.jpg")).toExternalForm()));
         foto.setPreserveRatio(true);
 
-        StackPane contenedor = new StackPane(foto);
+        Label selected = new Label("Selected");
+        selected.setStyle("-fx-text-fill: white;-fx-font-size: 32px;");
+        selected.setVisible(false);
+
+        StackPane contenedor = new StackPane(foto, selected);
         contenedor.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.3, 5, 5);");
         return contenedor;
     }
