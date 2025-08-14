@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,10 +20,7 @@ import org.francalderon.app.fotocabina.service.ArchivoService;
 import org.francalderon.app.fotocabina.service.PlantillaService;
 import org.francalderon.app.fotocabina.service.ServiceManager;
 import org.francalderon.app.fotocabina.service.WebcamService;
-import org.francalderon.app.fotocabina.utils.AbrirCarpeta;
-import org.francalderon.app.fotocabina.utils.EditorImagenes;
-import org.francalderon.app.fotocabina.utils.FXUtils;
-import org.francalderon.app.fotocabina.utils.SelectorImagen;
+import org.francalderon.app.fotocabina.utils.*;
 
 import java.io.IOException;
 
@@ -48,6 +46,9 @@ public class MainViewController {
         plantillaLive.prefHeightProperty().bind(plantilla.prefHeightProperty());
         plantillaLive.getChildren().add(plantilla);
     }
+
+    @FXML
+    private CheckBox openLive;
 
     @FXML
     private Label labelMiniPreview;
@@ -93,6 +94,11 @@ public class MainViewController {
 
     @FXML
     private StackPane contenedorMiniPreview;
+
+    @FXML
+    protected void onOpenLiveClick() throws IOException {
+        AdminVentanas.toggleLiveWindow(openLive.isSelected());
+    }
 
     @FXML
     protected void onCapturaClick() {
