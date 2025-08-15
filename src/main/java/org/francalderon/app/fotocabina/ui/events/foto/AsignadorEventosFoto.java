@@ -24,18 +24,21 @@ public class AsignadorEventosFoto {
         });
     }
 
-    public static void arrastrarFoto(StackPane imagen){
+    public static void arrastrarFoto(PlantillaService plantillaService,StackPane imagen){
         final Delta delta = new Delta();
         imagen.setOnMousePressed(e2 -> {
             delta.x = e2.getSceneX() - imagen.getLayoutX();
             delta.y = e2.getSceneY() - imagen.getLayoutY();
+            plantillaService.actualizarConfig();
         });
 
         imagen.setOnMouseDragged(e3 -> {
             imagen.setLayoutX(e3.getSceneX() - delta.x);
             imagen.setLayoutY(e3.getSceneY() - delta.y);
+            plantillaService.actualizarConfig();
         });
     }
+
 
     private static class Delta {
         double x, y;

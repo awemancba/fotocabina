@@ -131,7 +131,7 @@ public class WebcamService {
         int[] temporizador = {3};
         timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0), e -> countDown.setText("Preparense")
-                ,   new KeyValue(countDown.opacityProperty(), 1.0)),
+                        , new KeyValue(countDown.opacityProperty(), 1.0)),
 
                 new KeyFrame(Duration.seconds(tiempo), temp0 -> countDown.setText(""), new KeyValue(countDown.opacityProperty(), 0.0)),
 
@@ -163,11 +163,12 @@ public class WebcamService {
     }
 
     public void tomarFotosConTemporizador() {
+        int cantidadFotos = plantilla.getGaleria().size();
         List<BufferedImage> fotos = new ArrayList<>();
         new Thread(() -> {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < cantidadFotos; i++) {
                 CountDownLatch latch = new CountDownLatch(1);
-                Platform.runLater(() -> temporizador(5,latch::countDown));
+                Platform.runLater(() -> temporizador(5, latch::countDown));
                 try {
                     latch.await(); // Espera a que termine la animación
                 } catch (InterruptedException e) {

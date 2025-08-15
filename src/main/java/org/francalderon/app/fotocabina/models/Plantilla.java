@@ -113,8 +113,14 @@ public class Plantilla extends Pane {
         return this.galeria.get(imgSelected);
     }
 
-    public void addImage(StackPane stackPane){
+    public void addImage(StackPane stackPane) {
+        this.galeria.add(stackPane);
         this.getChildren().add(stackPane);
+    }
+
+    public void deleteImage() {
+        this.getChildren().remove(selected());
+        this.galeria.remove(selected());
     }
 
 

@@ -1,5 +1,6 @@
 package org.francalderon.app.fotocabina;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +21,7 @@ import org.francalderon.app.fotocabina.service.ArchivoService;
 import org.francalderon.app.fotocabina.service.PlantillaService;
 import org.francalderon.app.fotocabina.service.ServiceManager;
 import org.francalderon.app.fotocabina.service.WebcamService;
+import org.francalderon.app.fotocabina.ui.events.foto.EliminarComponente;
 import org.francalderon.app.fotocabina.utils.*;
 
 import java.io.IOException;
@@ -45,6 +47,14 @@ public class MainViewController {
         plantillaLive.prefWidthProperty().bind(plantilla.prefWidthProperty());
         plantillaLive.prefHeightProperty().bind(plantilla.prefHeightProperty());
         plantillaLive.getChildren().add(plantilla);
+
+        Platform.runLater(() -> {
+            Scene scene = btnPlantilla.getScene();
+            Stage stage = (Stage) scene.getWindow();
+            EliminarComponente.foto(stage, scene, plantillaService);
+        });
+
+
     }
 
     @FXML
@@ -97,7 +107,7 @@ public class MainViewController {
 
     @FXML
     protected void onOpenLiveClick() throws IOException {
-        AdminVentanas.toggleLiveWindow(openLive.isSelected());
+        AdminVentanas.toggleLiveWindow(openLive);
     }
 
     @FXML
@@ -119,7 +129,7 @@ public class MainViewController {
             nuevaVentana.setScene(new Scene(root));
             nuevaVentana.show();
         } catch (IOException ex) {
-            throw  new RuntimeException();
+            throw new RuntimeException();
         }
     }
 
@@ -137,13 +147,13 @@ public class MainViewController {
             nuevaVentana.setScene(new Scene(root));
             nuevaVentana.show();
         } catch (IOException ex) {
-            throw  new RuntimeException();
+            throw new RuntimeException();
         }
     }
 
     @FXML
     protected void onImprimirClick() {
-
+        plantillaService.agregarFoto();
     }
 
     @FXML
@@ -167,7 +177,7 @@ public class MainViewController {
 
     }
 
-    private Stage obtenerStage(){
+    private Stage obtenerStage() {
         return (Stage) btnCaptura.getScene().getWindow();
     }
 }
