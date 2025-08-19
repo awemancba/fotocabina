@@ -14,6 +14,8 @@ import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import javafx.scene.control.Label;
+import org.francalderon.app.fotocabina.ui.events.foto.DesactivarNodo;
+import org.francalderon.app.fotocabina.utils.EditorImagenes;
 import org.francalderon.app.fotocabina.utils.ExportarPlantilla;
 
 import java.awt.*;
@@ -59,8 +61,8 @@ public class WebcamService {
             while (running) {
                 BufferedImage original = webcam.getImage();
                 if (original != null) {
-                    BufferedImage mirrored = aplicarEspejoHorizontal(original);
-                    BufferedImage recortado = ImagenService.recortar13to10(mirrored);
+                    BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(original);
+                    BufferedImage recortado = EditorImagenes.recortar13to10(mirrored);
                     Image fxImage = SwingFXUtils.toFXImage(recortado, null);
                     Image fxImage2 = SwingFXUtils.toFXImage(recortado, null);
                     Platform.runLater(() -> {
@@ -110,28 +112,23 @@ public class WebcamService {
         this.countDown = countDownLabel;
     }
 
-    public boolean isRunning() {
-        return running;
+    public void setIcono(ImageView imageView){
+        this.icono = imageView;
     }
 
-    public static BufferedImage aplicarEspejoHorizontal(BufferedImage original) {
-        BufferedImage espejo = new BufferedImage(original.getWidth(), original.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = espejo.createGraphics();
-        g.drawImage(original,
-                original.getWidth(), 0,
-                0, original.getHeight(),
-                0, 0,
-                original.getWidth(), original.getHeight(),
-                null);
-        g.dispose();
-        return espejo;
+    public ImageView getIcono(){
+        return icono;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public void temporizador(double tiempo, Runnable cuandoTermina) {
         int[] temporizador = {3};
         timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0), e -> countDown.setText("Preparense")
-                ,   new KeyValue(countDown.opacityProperty(), 1.0)),
+                        , new KeyValue(countDown.opacityProperty(), 1.0)),
 
                 new KeyFrame(Duration.seconds(tiempo), temp0 -> countDown.setText(""), new KeyValue(countDown.opacityProperty(), 0.0)),
 
@@ -141,9 +138,7 @@ public class WebcamService {
                                 if (temporizador[0] > 0) {
                                     countDown.setText(String.valueOf(temporizador[0]));
                                     temporizador[0]--;
-                                    System.out.println("esto se ejecuto");
                                 } else {
-                                    System.out.println("se ejecuto la imagen");
                                     countDown.setText("");
                                     countDown.setGraphic(icono);
                                 }
@@ -163,11 +158,12 @@ public class WebcamService {
     }
 
     public void tomarFotosConTemporizador() {
+        int cantidadFotos = plantilla.getGaleria().size();
         List<BufferedImage> fotos = new ArrayList<>();
         new Thread(() -> {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < cantidadFotos; i++) {
                 CountDownLatch latch = new CountDownLatch(1);
-                Platform.runLater(() -> temporizador(5,latch::countDown));
+                Platform.runLater(() -> temporizador(5, latch::countDown));
                 try {
                     latch.await(); // Espera a que termine la animación
                 } catch (InterruptedException e) {
@@ -175,12 +171,13 @@ public class WebcamService {
                 }
 
                 BufferedImage imagen = webcam.getImage();
-                BufferedImage mirrored = aplicarEspejoHorizontal(imagen);
-                BufferedImage recortado = ImagenService.recortar13to10(mirrored);
+                BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(imagen);
+                BufferedImage recortado = EditorImagenes.recortar13to10(mirrored);
                 fotos.add(recortado);
             }
             this.plantilla.setGaleria(fotos);
             Platform.runLater(() -> {
+                DesactivarNodo.texto(plantilla.getGaleria());
                 ExportarPlantilla.guardarComoPNG(plantilla);
                 countDown.setOpacity(1.0);
                 countDown.setText("Bienvenido");
@@ -189,4 +186,6 @@ public class WebcamService {
         }).start();
 
     }
+
+
 }

@@ -21,18 +21,14 @@ public class SelectorImagen {
         return null;
     }
 
-    public static String seleccionarImagenURL(Stage stage) {
+    public static File seleccionarImagenFile(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar imagen");
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
 
-        File archivo = fileChooser.showOpenDialog(stage);
-        if (archivo != null) {
-            return archivo.toURI().toString();
-        }
-        return null;
+        return fileChooser.showOpenDialog(stage);
     }
 
 

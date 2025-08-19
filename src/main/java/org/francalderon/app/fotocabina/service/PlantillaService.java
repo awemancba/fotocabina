@@ -1,6 +1,7 @@
 package org.francalderon.app.fotocabina.service;
 
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +21,6 @@ public class PlantillaService {
     private Plantilla plantilla;
     private EditorImagenes editorImagenes;
     private ArchivoService archivoService;
-
 
 
     public PlantillaService(ArchivoService archivoService) {
@@ -85,8 +85,24 @@ public class PlantillaService {
         ajustarVentana();
     }
 
+    public void agregarFoto() {
+        int numeroFoto = plantilla.getGaleria().size();
+        StackPane nuevaFoto = crearFotoDefault(numeroFoto);
+        AsignadorEventosFoto.selected(nuevaFoto, numeroFoto, plantilla);
+        AsignadorEventosFoto.arrastrarFoto(this, nuevaFoto);
+        plantilla.addImage(nuevaFoto);
+        actualizarConfig();
+    }
 
-    private void actualizarConfig() {
+    public void removerFoto() {
+        plantilla.deleteImage();
+        actualizarConfig();
+        eliminarComponentes();
+        cargarUltimaConfig();
+    }
+
+
+    public void actualizarConfig() {
         StringBuilder configuracion = new StringBuilder();
         int cantidadFotos = plantilla.getGaleria().size();
         configuracion.append(cantidadFotos).append("\n");
@@ -132,7 +148,7 @@ public class PlantillaService {
         String tamanio = configuracion.get(1);
 
         for (int i = 0; i < cantidadFotos; i++) {
-            StackPane imagen = crearFotoDefault();
+            StackPane imagen = crearFotoDefault(i);
             String[] coordenada = coordenadas.get(i).split(",");
 
             double newX = Double.parseDouble(coordenada[0]);
@@ -147,10 +163,9 @@ public class PlantillaService {
             imagen.setLayoutY(newY);
 
             AsignadorEventosFoto.selected(imagen, i, plantilla);
-            AsignadorEventosFoto.arrastrarFoto(imagen);
+            AsignadorEventosFoto.arrastrarFoto(this, imagen);
 
             plantilla.addImage(imagen);
-            plantilla.getGaleria().add(imagen);
 
             switch (tamanio) {
                 case "9x13" -> Platform.runLater(this::cambiarTam9x13);
@@ -169,11 +184,12 @@ public class PlantillaService {
         stage.sizeToScene();
     }
 
-    private StackPane crearFotoDefault() {
+    private StackPane crearFotoDefault(int numeroImagen) {
         ImageView foto = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/img/fotoDefault.jpg")).toExternalForm()));
+        foto.setFitHeight(200);
         foto.setPreserveRatio(true);
 
-        Label selected = new Label("Selected");
+        Label selected = new Label("Selected" + (numeroImagen + 1));
         selected.setStyle("-fx-text-fill: white;-fx-font-size: 32px;");
         selected.setVisible(false);
 
@@ -189,5 +205,11 @@ public class PlantillaService {
         for (int i = 0; i < 3; i++) {
             ultimaConfig.add("45.0," + (200.0 * (i + 1)) + "," + "200.0");
         }
+    }
+
+    private void eliminarComponentes() {
+        List<Node> componentes = plantilla.getChildren();
+        componentes.removeIf(node -> node instanceof Label || node instanceof StackPane);
+        plantilla.getGaleria().clear();
     }
 }

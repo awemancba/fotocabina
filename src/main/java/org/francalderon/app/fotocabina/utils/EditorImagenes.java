@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.francalderon.app.fotocabina.models.Plantilla;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class EditorImagenes {
@@ -30,8 +31,6 @@ public class EditorImagenes {
         System.out.println(largoActual);
         imageView.setFitHeight(largoActual + width);
     }
-
-
 
     public static BufferedImage recortarApectRatio(BufferedImage imagen, Double aspectRatioWidth, Double aspectRatioHeight) {
         if (imagen == null) {
@@ -63,6 +62,23 @@ public class EditorImagenes {
 
             return imagen.getSubimage(x, 0, nuevoAncho, height);
         }
+    }
+
+    public static BufferedImage aplicarEspejoHorizontal(BufferedImage original) {
+        BufferedImage espejo = new BufferedImage(original.getWidth(), original.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = espejo.createGraphics();
+        g.drawImage(original,
+                original.getWidth(), 0,
+                0, original.getHeight(),
+                0, 0,
+                original.getWidth(), original.getHeight(),
+                null);
+        g.dispose();
+        return espejo;
+    }
+
+    public static BufferedImage recortar13to10(BufferedImage imagen){
+        return EditorImagenes.recortarApectRatio(imagen,13.0,10.0);
     }
 
     public void cambiarPosicion(double dx, double dy) {

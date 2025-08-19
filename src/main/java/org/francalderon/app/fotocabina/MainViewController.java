@@ -1,10 +1,12 @@
 package org.francalderon.app.fotocabina;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,10 +21,8 @@ import org.francalderon.app.fotocabina.service.ArchivoService;
 import org.francalderon.app.fotocabina.service.PlantillaService;
 import org.francalderon.app.fotocabina.service.ServiceManager;
 import org.francalderon.app.fotocabina.service.WebcamService;
-import org.francalderon.app.fotocabina.utils.AbrirCarpeta;
-import org.francalderon.app.fotocabina.utils.EditorImagenes;
-import org.francalderon.app.fotocabina.utils.FXUtils;
-import org.francalderon.app.fotocabina.utils.SelectorImagen;
+import org.francalderon.app.fotocabina.ui.events.foto.EliminarComponente;
+import org.francalderon.app.fotocabina.utils.*;
 
 import java.io.IOException;
 
@@ -47,7 +47,25 @@ public class MainViewController {
         plantillaLive.prefWidthProperty().bind(plantilla.prefWidthProperty());
         plantillaLive.prefHeightProperty().bind(plantilla.prefHeightProperty());
         plantillaLive.getChildren().add(plantilla);
+
+        Platform.runLater(() -> {
+            Scene scene = btnPlantilla.getScene();
+            Stage stage = (Stage) scene.getWindow();
+            EliminarComponente.foto(stage, scene, plantillaService);
+
+            obtenerStage().setOnCloseRequest(e->{
+                webcamService.stop();
+                if (AdminVentanas.getVentanaVivo() != null){
+                    AdminVentanas.getVentanaVivo().close();
+                }
+            });
+
+        });
+
     }
+
+    @FXML
+    private CheckBox openLive;
 
     @FXML
     private Label labelMiniPreview;
@@ -95,26 +113,18 @@ public class MainViewController {
     private StackPane contenedorMiniPreview;
 
     @FXML
+    protected void onOpenLiveClick() throws IOException {
+        AdminVentanas.toggleLiveWindow(openLive);
+    }
+
+    @FXML
     protected void onCapturaClick() {
         webcamService.tomarFotosConTemporizador();
     }
 
     @FXML
-    protected void onPlantillaClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PlantillaView.fxml"));
-            Parent root = loader.load();
-
-            Stage nuevaVentana = new Stage();
-            nuevaVentana.setTitle("Ventana secundaria");
-            nuevaVentana.initOwner(obtenerStage());
-            nuevaVentana.initModality(Modality.NONE);
-            nuevaVentana.setAlwaysOnTop(true);
-            nuevaVentana.setScene(new Scene(root));
-            nuevaVentana.show();
-        } catch (IOException ex) {
-            throw  new RuntimeException();
-        }
+    protected void onPlantillaClick() throws IOException {
+        AdminVentanas.plantillaView(obtenerStage());
     }
 
     @FXML
@@ -131,13 +141,13 @@ public class MainViewController {
             nuevaVentana.setScene(new Scene(root));
             nuevaVentana.show();
         } catch (IOException ex) {
-            throw  new RuntimeException();
+            throw new RuntimeException();
         }
     }
 
     @FXML
     protected void onImprimirClick() {
-
+        plantillaService.agregarFoto();
     }
 
     @FXML
@@ -147,21 +157,21 @@ public class MainViewController {
 
     @FXML
     protected void onFondoClick() {
-        Stage stage = FXUtils.obternerStage(btnFondo);
-        Image nuevoFondo = SelectorImagen.seleccionarImagen(stage);
-        if (nuevoFondo != null) {
-            plantilla.getFondo().setImage(nuevoFondo);
-        } else {
-            System.out.println("No se puede cargar imagen");
-        }
+
     }
 
     @FXML
     protected void onAjustesClick() {
-
+        Stage stage = (Stage) btnAjustes.getScene().getWindow();
+        Image nuevoIcono = SelectorImagen.seleccionarImagen(stage);
+        if (nuevoIcono != null){
+            webcamService.getIcono().setImage(nuevoIcono);
+        } else {
+            System.out.println("No se puede cargar la imagen");
+        }
     }
 
-    private Stage obtenerStage(){
+    private Stage obtenerStage() {
         return (Stage) btnCaptura.getScene().getWindow();
     }
 }

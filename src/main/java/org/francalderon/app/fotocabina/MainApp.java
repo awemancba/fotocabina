@@ -20,12 +20,5 @@ public class MainApp extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Controles");
         primaryStage.show();
-
-        FXMLLoader liveView = new FXMLLoader(getClass().getResource("/fxml/LiveView.fxml"));
-        Parent live = liveView.load();
-        Stage ventanaVivo = new Stage();
-        ventanaVivo.setScene(new Scene(live));
-        ventanaVivo.setTitle("Vivo");
-        ventanaVivo.show();
     }
 }

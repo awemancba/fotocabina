@@ -1,3 +1,18 @@
+.color-primario{
+    -fx-background-color: #A7ABE1;
+}
+
+.color-primario:hover{
+    -fx-background-color: #8A8FC1;
+}
+
+
+
+.color-fondo{
+    -fx-background-color: linear-gradient(to bottom right, #D4CDEB, #BFB9D4);
+}
+
+
 .boton-fotocabina {
     -fx-background-color: linear-gradient(to bottom, #FF6F61, #FF8A65);
     -fx-text-fill: white;
@@ -30,12 +45,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.4, 0, 3);
 }
 
-.fondo-derecho{
-    -fx-background-color: linear-gradient(to bottom right, #D4CDEB, #BFB9D4);
-}
-
 .boton-control{
-    -fx-background-color: #A7ABE1;
     -fx-text-fill: white;
     -fx-font-family: "Roboto";  
     -fx-font-weight: bold;
@@ -46,7 +56,6 @@
 }
 
 .boton-control:hover {
-    -fx-background-color: #8A8FC1;
     -fx-text-fill: #fff;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
