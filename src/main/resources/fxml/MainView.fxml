@@ -70,7 +70,7 @@
                   <RowConstraints />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnPlantilla" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="342.0" layoutY="17.0" mnemonicParsing="false" onAction="#onPlantillaClick" prefHeight="90.0" prefWidth="267.0" text="Cambiar Plantilla" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Button fx:id="btnPlantilla" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="342.0" layoutY="17.0" mnemonicParsing="false" onAction="#onPlantillaClick" prefHeight="90.0" prefWidth="267.0" text="Opciones Plantilla" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
                            <image>
@@ -86,7 +86,7 @@
                         <String fx:value="color-primario" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="btnFondo" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onFondoClick" prefHeight="90.0" prefWidth="267.0" text="Cambiar Fondo" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <Button fx:id="btnFondo" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onFondoClick" prefHeight="90.0" prefWidth="267.0" text="Opciones Fotos" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
                            <image>

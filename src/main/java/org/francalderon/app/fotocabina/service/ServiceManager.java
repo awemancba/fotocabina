@@ -28,6 +28,10 @@ public class ServiceManager {
         webcamService.start();
     }
 
+    public void detenerServicios(){
+        webcamService.stop();
+    }
+
     public static ServiceManager getInstance() throws IOException {
         if (instance == null){
             instance = new ServiceManager();

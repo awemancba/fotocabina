@@ -4,12 +4,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class AdminVentanas {
     private static Stage ventanaVivo;
+    private static Stage plantillaView;
 
     public static void toggleLiveWindow(CheckBox checkBox) throws IOException {
         if (checkBox.isSelected()) {
@@ -32,5 +34,32 @@ public class AdminVentanas {
                 ventanaVivo = null;
             }
         }
+    }
+
+    public static void plantillaView(Stage stage) throws IOException {
+        if (plantillaView == null || !plantillaView.isShowing()) {
+            FXMLLoader loader = new FXMLLoader(AdminVentanas.class.getResource("/fxml/PlantillaView.fxml"));
+            Parent root = loader.load();
+
+            plantillaView = new Stage();
+            plantillaView.setTitle("Ventana secundaria");
+            plantillaView.initOwner(stage);
+            plantillaView.initModality(Modality.NONE);
+            plantillaView.setAlwaysOnTop(true);
+            plantillaView.setScene(new Scene(root));
+            plantillaView.show();
+        } else {
+            plantillaView.close();
+            plantillaView = null;
+        }
+
+    }
+
+    public static Stage getVentanaVivo() {
+        return ventanaVivo;
+    }
+
+    public static  Stage getPlantillaView(){
+        return plantillaView;
     }
 }

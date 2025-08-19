@@ -52,8 +52,15 @@ public class MainViewController {
             Scene scene = btnPlantilla.getScene();
             Stage stage = (Stage) scene.getWindow();
             EliminarComponente.foto(stage, scene, plantillaService);
-        });
 
+            obtenerStage().setOnCloseRequest(e->{
+                webcamService.stop();
+                if (AdminVentanas.getVentanaVivo() != null){
+                    AdminVentanas.getVentanaVivo().close();
+                }
+            });
+
+        });
 
     }
 
@@ -116,21 +123,8 @@ public class MainViewController {
     }
 
     @FXML
-    protected void onPlantillaClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PlantillaView.fxml"));
-            Parent root = loader.load();
-
-            Stage nuevaVentana = new Stage();
-            nuevaVentana.setTitle("Ventana secundaria");
-            nuevaVentana.initOwner(obtenerStage());
-            nuevaVentana.initModality(Modality.NONE);
-            nuevaVentana.setAlwaysOnTop(true);
-            nuevaVentana.setScene(new Scene(root));
-            nuevaVentana.show();
-        } catch (IOException ex) {
-            throw new RuntimeException();
-        }
+    protected void onPlantillaClick() throws IOException {
+        AdminVentanas.plantillaView(obtenerStage());
     }
 
     @FXML
@@ -163,18 +157,18 @@ public class MainViewController {
 
     @FXML
     protected void onFondoClick() {
-        Stage stage = FXUtils.obternerStage(btnFondo);
-        Image nuevoFondo = SelectorImagen.seleccionarImagen(stage);
-        if (nuevoFondo != null) {
-            plantilla.getFondo().setImage(nuevoFondo);
-        } else {
-            System.out.println("No se puede cargar imagen");
-        }
+
     }
 
     @FXML
     protected void onAjustesClick() {
-
+        Stage stage = (Stage) btnAjustes.getScene().getWindow();
+        Image nuevoIcono = SelectorImagen.seleccionarImagen(stage);
+        if (nuevoIcono != null){
+            webcamService.getIcono().setImage(nuevoIcono);
+        } else {
+            System.out.println("No se puede cargar la imagen");
+        }
     }
 
     private Stage obtenerStage() {
