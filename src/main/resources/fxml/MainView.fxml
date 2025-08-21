@@ -20,9 +20,9 @@
       <Pane fx:id="plantillaLive" prefHeight="960.0" prefWidth="700.0" />
       <VBox fx:id="controles" alignment="CENTER" prefHeight="960.0" prefWidth="640.0" spacing="20.0" styleClass="color-fondo" stylesheets="@../css/estilos.css">
          <children>
-            <HBox alignment="CENTER" prefHeight="267.0" prefWidth="600.0" spacing="20.0">
+            <HBox alignment="CENTER" prefHeight="267.0" prefWidth="600.0" spacing="30.0">
                <children>
-                  <VBox prefHeight="224.0" prefWidth="216.0" spacing="20.0">
+                  <VBox prefHeight="224.0" prefWidth="267.0" spacing="17.0">
                      <children>
                         <CheckBox fx:id="openLive" mnemonicParsing="false" onAction="#onOpenLiveClick" text="Ventana en vivo">
                            <font>
@@ -39,12 +39,28 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </CheckBox>
+                        <Button fx:id="btnVerFotos" alignment="BASELINE_LEFT" graphicTextGap="25.0" mnemonicParsing="false" onAction="#onVerFotosClick" prefHeight="90.0" prefWidth="267.0" text="Ver fotos" wrapText="true">
+                           <graphic>
+                              <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
+                                 <image>
+                                    <Image url="@../img/fotos.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets left="15.0" right="15.0" />
+                           </padding>
+                           <styleClass>
+                              <String fx:value="boton-control" />
+                              <String fx:value="color-primario" />
+                           </styleClass>
+                        </Button>
                      </children>
                      <padding>
                         <Insets bottom="20.0" top="20.0" />
                      </padding>
                   </VBox>
-                  <Button fx:id="btnCaptura" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCapturaClick" prefHeight="98.0" prefWidth="313.0" styleClass="boton-fotocabina" stylesheets="@../css/estilos.css" text="SONRIE Y EMPIEZA!">
+                  <Button fx:id="btnCaptura" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCapturaClick" prefHeight="182.0" prefWidth="267.0" styleClass="boton-fotocabina" stylesheets="@../css/estilos.css" text="SONRIE Y EMPIEZA!">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -58,7 +74,7 @@
                   </Button>
                </children>
             </HBox>
-            <GridPane prefHeight="312.0" prefWidth="620.0">
+            <GridPane prefHeight="312.0" prefWidth="600.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -86,7 +102,7 @@
                         <String fx:value="color-primario" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="btnFondo" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onFondoClick" prefHeight="90.0" prefWidth="267.0" text="Opciones Fotos" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <Button fx:id="btnFotos" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onFotosClick" prefHeight="90.0" prefWidth="267.0" text="Opciones Fotos" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
                            <image>
@@ -102,11 +118,11 @@
                         <String fx:value="color-primario" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="btnFotos" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onFotosClick" prefHeight="90.0" prefWidth="267.0" text="Ver fotos" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <Button fx:id="btnCargarPlantilla" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onCargarPlantillaClick" prefHeight="90.0" prefWidth="267.0" text="Cargar Plantilla" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
                            <image>
-                              <Image url="@../img/fotos.png" />
+                              <Image url="@../img/cargar.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -118,11 +134,11 @@
                         <String fx:value="color-primario" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="btnTamanio" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onTamanioClick" prefHeight="90.0" prefWidth="267.0" text="Cambiar Tamaño" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Button fx:id="btnGuardarPlantilla" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onGuardarPlantillaClick" prefHeight="90.0" prefWidth="267.0" text="Guardar Plantilla" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
                            <image>
-                              <Image url="@../img/tamanio.png" />
+                              <Image url="@../img/guardar.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -134,7 +150,7 @@
                         <String fx:value="color-primario" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="btnImprimir" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onImprimirClick" prefHeight="90.0" prefWidth="267.0" text="Imprimir" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <Button fx:id="btnImprimir" alignment="BASELINE_LEFT" graphicTextGap="25.0" layoutX="32.0" layoutY="17.0" mnemonicParsing="false" onAction="#onImprimirClick" prefHeight="90.0" prefWidth="267.0" text="Imprimir" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="img-boton">
                            <image>

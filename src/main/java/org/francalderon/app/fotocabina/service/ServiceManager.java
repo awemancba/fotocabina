@@ -20,20 +20,18 @@ public class ServiceManager {
         plantillaService = new PlantillaService(archivoService);
         plantilla = new Plantilla(editorImagenes, plantillaService);
         webcamService = new WebcamService(640, 480, plantilla);
-
-
     }
 
-    public void iniciarServicios(){
+    public void iniciarServicios() {
         webcamService.start();
     }
 
-    public void detenerServicios(){
+    public void detenerServicios() {
         webcamService.stop();
     }
 
     public static ServiceManager getInstance() throws IOException {
-        if (instance == null){
+        if (instance == null) {
             instance = new ServiceManager();
         }
         return instance;

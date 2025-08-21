@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class SelectorImagen {
+public class SelectorArchivo {
     public static Image seleccionarImagen(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Cambiar fondo");
@@ -24,10 +24,14 @@ public class SelectorImagen {
     public static File seleccionarImagenFile(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar imagen");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif")
-        );
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+        return fileChooser.showOpenDialog(stage);
+    }
 
+    public static File seleccionarConfigFile(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar archivo");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Plantilla", "*.txt"));
         return fileChooser.showOpenDialog(stage);
     }
 

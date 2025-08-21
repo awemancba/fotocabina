@@ -1,8 +1,9 @@
 package org.francalderon.app.fotocabina.service;
 
-
 import javafx.stage.Stage;
-import org.francalderon.app.fotocabina.utils.SelectorImagen;
+import org.francalderon.app.fotocabina.utils.AdminVentanas;
+import org.francalderon.app.fotocabina.utils.GuardadorArchivo;
+import org.francalderon.app.fotocabina.utils.SelectorArchivo;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -53,7 +54,7 @@ public class ArchivoService {
     }
 
     public static String copyToResources(Stage stage) {
-        File archivoSeleccionado = SelectorImagen.seleccionarImagenFile(stage);
+        File archivoSeleccionado = SelectorArchivo.seleccionarImagenFile(stage);
 
         Path origen = archivoSeleccionado.toPath();
         Path destino = generarDestinoConRenombre(RESOURCES.resolve(archivoSeleccionado.getName()));
@@ -88,4 +89,9 @@ public class ArchivoService {
         }
         return destino;
     }
+
+    public void guardarConfig() {
+        GuardadorArchivo.configPlantilla(AdminVentanas.getPrimaryStage());
+    }
+
 }

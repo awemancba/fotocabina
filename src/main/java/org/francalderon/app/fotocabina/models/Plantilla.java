@@ -14,6 +14,7 @@ import org.francalderon.app.fotocabina.utils.EscaladorProporcional;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +28,7 @@ public class Plantilla extends Pane {
     private EditorImagenes editorImagenes;
     private PlantillaService plantillaService;
     private TamanioFoto tamanioFoto;
+    public static final String CONFIGURACION_TXT = System.getProperty("user.home") + "/.fotocabina/config.txt";
 
 
     public Plantilla(EditorImagenes editor, PlantillaService plantillaService) {
@@ -37,7 +39,7 @@ public class Plantilla extends Pane {
         double alto = Screen.getPrimary().getVisualBounds().getHeight();
         double ancho = EscaladorProporcional.calcularAncho(imgFondo.getWidth(), imgFondo.getHeight(), alto).getWidth();
 
-        this.fondo = new ImageView(imgFondo);
+        this.fondo = new ImageView();
         this.fondo.setFitWidth(ancho);
         this.fondo.setFitHeight(alto);
         this.setPrefSize(ancho, alto);
@@ -51,7 +53,8 @@ public class Plantilla extends Pane {
         plantillaService.setPlantilla(this);
         plantillaService.setEditorImagenes(editor);
 
-        plantillaService.cargarUltimaConfig();
+        File archivo = new File(CONFIGURACION_TXT);
+        plantillaService.cargarConfig(archivo);
     }
 
     public EditorImagenes getEditorImagenes() {

@@ -48,9 +48,7 @@ public class PlantillaViewController {
 
     @FXML
     protected void onCambiarFondoClick() {
-        String urlImage = ArchivoService.copyToResources(AdminVentanas.getPlantillaView());
-        Image nuevoFondo = new Image(urlImage);
-        Platform.runLater(() -> plantilla.getFondo().setImage(nuevoFondo));
+        plantillaService.cambiarFondo();
     }
 
     @FXML

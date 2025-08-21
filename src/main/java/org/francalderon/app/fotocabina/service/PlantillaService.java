@@ -10,7 +10,9 @@ import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
 import org.francalderon.app.fotocabina.ui.events.foto.AsignadorEventosFoto;
+import org.francalderon.app.fotocabina.utils.AdminVentanas;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
+import org.francalderon.app.fotocabina.utils.SelectorArchivo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -98,9 +100,23 @@ public class PlantillaService {
         plantilla.deleteImage();
         actualizarConfig();
         eliminarComponentes();
-        cargarUltimaConfig();
+        File archivo = new File(Plantilla.CONFIGURACION_TXT);
+        cargarConfig(archivo);
     }
 
+    public void cambiarFondo(){
+        String urlImage = ArchivoService.copyToResources(AdminVentanas.getPlantillaView());
+        Image nuevoFondo = new Image(urlImage);
+        plantilla.getFondo().setImage(nuevoFondo);
+        actualizarConfig();
+    }
+
+    public void cargarPlantilla(){
+        File config = SelectorArchivo.seleccionarConfigFile(AdminVentanas.getPrimaryStage());
+        eliminarComponentes();
+        cargarConfig(config);
+        actualizarConfig();
+    }
 
     public void actualizarConfig() {
         StringBuilder configuracion = new StringBuilder();
@@ -110,6 +126,9 @@ public class PlantillaService {
         String tamanioFoto = plantilla.getTamanioFoto().getNombre();
         configuracion.append(tamanioFoto).append("\n");
 
+        String urlFondo = plantilla.getFondo().getImage().getUrl();
+        configuracion.append(urlFondo).append("\n");
+
         for (StackPane fotos : plantilla.getGaleria()) {
             configuracion.append(fotos.getLayoutX()).append(",").append(fotos.getLayoutY()).append(",").append(fotos.getHeight()).append("\n");
         }
@@ -117,12 +136,12 @@ public class PlantillaService {
     }
 
 
-    public void cargarUltimaConfig() {
-        File archivo = new File(System.getProperty("user.home") + "/.fotocabina/config.txt");
+    public void cargarConfig(File archivo) {
         List<String> ultimaConfig = archivoService.leerArchivo(archivo);
         int cantidadFotos;
+        Image fondo;
 
-        if (ultimaConfig == null || ultimaConfig.size() < 2) {
+        if (ultimaConfig == null || ultimaConfig.size() < 3) {
             ultimaConfig = new ArrayList<>();
             cargarDatosDefault(ultimaConfig);
         }
@@ -135,17 +154,20 @@ public class PlantillaService {
             cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
         }
 
-
-        if (ultimaConfig.size() < 2 + cantidadFotos) {
+        if (ultimaConfig.size() < 3 + cantidadFotos) {
             ultimaConfig.clear();
             cargarDatosDefault(ultimaConfig);
             cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
         }
 
-        List<String> configuracion = ultimaConfig.subList(0, 2);
-        List<String> coordenadas = ultimaConfig.subList(2, ultimaConfig.size());
+        List<String> configuracion = ultimaConfig.subList(0, 3);
+        List<String> coordenadas = ultimaConfig.subList(3, ultimaConfig.size());
 
         String tamanio = configuracion.get(1);
+        String urlFondo = configuracion.get(2);
+        fondo = new Image(urlFondo);
+
+        plantilla.getFondo().setImage(fondo);
 
         for (int i = 0; i < cantidadFotos; i++) {
             StackPane imagen = crearFotoDefault(i);
@@ -167,11 +189,12 @@ public class PlantillaService {
 
             plantilla.addImage(imagen);
 
-            switch (tamanio) {
-                case "9x13" -> Platform.runLater(this::cambiarTam9x13);
-                case "10x15" -> Platform.runLater(this::cambiarTam10x15);
-                case "13x18" -> Platform.runLater(this::cambiarTam13x18);
-            }
+
+        }
+        switch (tamanio) {
+            case "9x13" -> Platform.runLater(this::cambiarTam9x13);
+            case "10x15" -> Platform.runLater(this::cambiarTam10x15);
+            case "13x18" -> Platform.runLater(this::cambiarTam13x18);
         }
     }
 
@@ -202,6 +225,7 @@ public class PlantillaService {
         ultimaConfig.clear();
         ultimaConfig.add("3");
         ultimaConfig.add("10x15");
+        ultimaConfig.add(Objects.requireNonNull(getClass().getResource("/img/fondoDefault.jpg")).toExternalForm());
         for (int i = 0; i < 3; i++) {
             ultimaConfig.add("45.0," + (200.0 * (i + 1)) + "," + "200.0");
         }
@@ -211,5 +235,6 @@ public class PlantillaService {
         List<Node> componentes = plantilla.getChildren();
         componentes.removeIf(node -> node instanceof Label || node instanceof StackPane);
         plantilla.getGaleria().clear();
+
     }
 }

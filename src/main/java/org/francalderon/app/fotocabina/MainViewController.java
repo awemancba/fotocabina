@@ -2,8 +2,6 @@ package org.francalderon.app.fotocabina;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -14,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import org.francalderon.app.fotocabina.service.ArchivoService;
@@ -71,25 +68,27 @@ public class MainViewController {
     private Label labelMiniPreview;
 
     @FXML
+    private Button btnVerFotos;
+
+    @FXML
+    private Button btnCaptura;
+
+    @FXML
     private Button btnPlantilla;
 
-    @FXML
-    private Button btnTamanio;
+    @FXML Button btnFotos;
 
     @FXML
-    private Button btnFondo;
+    private Button btnGuardarPlantilla;
+
+    @FXML
+    private Button btnCargarPlantilla;
 
     @FXML
     private Button btnImprimir;
 
     @FXML
-    private Button btnFotos;
-
-    @FXML
     private Button btnAjustes;
-
-    @FXML
-    private Button btnCaptura;
 
     @FXML
     private HBox contenedorPrincipal;
@@ -128,21 +127,13 @@ public class MainViewController {
     }
 
     @FXML
-    protected void onTamanioClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ImageControlView.fxml"));
-            Parent root = loader.load();
+    protected void onGuardarPlantillaClick() {
+        archivoService.guardarConfig();
+    }
 
-            Stage nuevaVentana = new Stage();
-            nuevaVentana.setTitle("Ventana secundaria");
-            nuevaVentana.initOwner(obtenerStage());
-            nuevaVentana.initModality(Modality.NONE);
-            nuevaVentana.setAlwaysOnTop(true);
-            nuevaVentana.setScene(new Scene(root));
-            nuevaVentana.show();
-        } catch (IOException ex) {
-            throw new RuntimeException();
-        }
+    @FXML
+    protected void onCargarPlantillaClick(){
+        plantillaService.cargarPlantilla();
     }
 
     @FXML
@@ -151,19 +142,22 @@ public class MainViewController {
     }
 
     @FXML
-    protected void onFotosClick() {
+    protected void onVerFotosClick() {
         AbrirCarpeta.verFotos();
     }
 
     @FXML
-    protected void onFondoClick() {
-
+    protected void onFotosClick() throws IOException {
+        AdminVentanas.imageControlView(obtenerStage());
     }
+
+
+
 
     @FXML
     protected void onAjustesClick() {
         Stage stage = (Stage) btnAjustes.getScene().getWindow();
-        Image nuevoIcono = SelectorImagen.seleccionarImagen(stage);
+        Image nuevoIcono = SelectorArchivo.seleccionarImagen(stage);
         if (nuevoIcono != null){
             webcamService.getIcono().setImage(nuevoIcono);
         } else {

@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import javafx.stage.Stage;
+import org.francalderon.app.fotocabina.utils.AdminVentanas;
 
 public class MainApp extends Application {
 
@@ -17,6 +18,8 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
         Parent root = loader.load();
+        AdminVentanas.setPrimaryStage(primaryStage);
+
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Controles");
         primaryStage.show();
