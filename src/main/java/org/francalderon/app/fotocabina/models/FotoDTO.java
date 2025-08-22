@@ -2,7 +2,6 @@ package org.francalderon.app.fotocabina.models;
 
 public class FotoDTO {
     private double alto;
-    private double ancho;
     private double X;
     private double y;
 
@@ -17,13 +16,6 @@ public class FotoDTO {
         this.alto = alto;
     }
 
-    public double getAncho() {
-        return ancho;
-    }
-
-    public void setAncho(double ancho) {
-        this.ancho = ancho;
-    }
 
     public double getX() {
         return X;

@@ -14,7 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.services.ArchivoTxtService;
+import org.francalderon.app.fotocabina.models.PlantillaDTO;
 import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.services.ServiceManager;
 import org.francalderon.app.fotocabina.services.WebcamService;
@@ -24,13 +24,12 @@ import org.francalderon.app.fotocabina.utils.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class MainViewController {
     @FXML
     Plantilla plantilla;
     EditorImagenes editorImagenes;
-    ArchivoService<List<String>> archivoTxtService;
+    ArchivoService<PlantillaDTO> archivoService;
     PlantillaService plantillaService;
     WebcamService webcamService;
 
@@ -38,12 +37,12 @@ public class MainViewController {
         ServiceManager serviceManager = ServiceManager.getInstance();
         plantilla = serviceManager.getPlantilla();
         editorImagenes = serviceManager.getEditorImagenes();
-        archivoTxtService = serviceManager.getArchivoService();
+        archivoService = serviceManager.getArchivoService();
         plantillaService = serviceManager.getPlantillaService();
         webcamService = serviceManager.getWebcamService();
         serviceManager.iniciarServicios();
 
-        File archivo = new File(Plantilla.CONFIGURACION_TXT);
+        File archivo = new File(Plantilla.CONFIGURACION_JSON);
         plantillaService.cargarConfig(archivo);
 
         imageMiniPreview.imageProperty().bind(webcamService.getMiniPreview().imageProperty());
@@ -134,7 +133,7 @@ public class MainViewController {
 
     @FXML
     protected void onGuardarPlantillaClick() {
-        archivoTxtService.guardarConfig();
+        archivoService.guardarConfig();
     }
 
     @FXML
@@ -156,9 +155,6 @@ public class MainViewController {
     protected void onFotosClick() throws IOException {
         AdminVentanas.imageControlView(obtenerStage());
     }
-
-
-
 
     @FXML
     protected void onAjustesClick() {

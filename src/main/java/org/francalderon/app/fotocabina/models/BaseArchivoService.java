@@ -1,6 +1,7 @@
 package org.francalderon.app.fotocabina.models;
 
 import javafx.stage.Stage;
+import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.utils.SelectorArchivo;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 
 public abstract class BaseArchivoService {
     protected Plantilla plantilla;
+    protected PlantillaService plantillaService;
     public static final Path RESOURCES = Paths.get(System.getProperty("user.home"), ".fotocabina", "resources");
     public static final Path FOTOCABINA = Paths.get(System.getProperty("user.home"), ".fotocabina");
 
@@ -31,13 +33,17 @@ public abstract class BaseArchivoService {
 
     public static String copyToResources(Stage stage) {
         File archivoSeleccionado = SelectorArchivo.seleccionarImagenFile(stage);
+        Path origen;
+        Path destino;
+        if (archivoSeleccionado != null) {
+            origen = archivoSeleccionado.toPath();
+            destino = generarDestinoConRenombre(RESOURCES.resolve(archivoSeleccionado.getName()));
 
-        Path origen = archivoSeleccionado.toPath();
-        Path destino = generarDestinoConRenombre(RESOURCES.resolve(archivoSeleccionado.getName()));
-
-        copiarArchivo(origen, destino);
-
-        return destino.toUri().toString();
+            copiarArchivo(origen, destino);
+            return destino.toUri().toString();
+        } else {
+            return null;
+        }
     }
 
     public static Path generarDestinoConRenombre(Path destinoOriginal) {
@@ -63,5 +69,13 @@ public abstract class BaseArchivoService {
 
     public void setPlantilla(Plantilla plantilla) {
         this.plantilla = plantilla;
+    }
+
+    public PlantillaService getPlantillaService() {
+        return plantillaService;
+    }
+
+    public void setPlantillaService(PlantillaService plantillaService) {
+        this.plantillaService = plantillaService;
     }
 }

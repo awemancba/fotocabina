@@ -29,7 +29,7 @@ public class Plantilla extends Pane {
     private PlantillaService plantillaService;
     private TamanioFoto tamanioFoto;
     public static final String CONFIGURACION_TXT = System.getProperty("user.home") + "/.fotocabina/config.txt";
-    public static final String CONFIGURACION_JSON = System.getProperty("user.home") + "/.fotocabina/config.txt";
+    public static final String CONFIGURACION_JSON = System.getProperty("user.home") + "/.fotocabina/config.json";
 
 
     public Plantilla() {

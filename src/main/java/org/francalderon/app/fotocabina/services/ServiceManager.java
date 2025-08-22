@@ -2,6 +2,7 @@ package org.francalderon.app.fotocabina.services;
 
 import org.francalderon.app.fotocabina.models.BaseArchivoService;
 import org.francalderon.app.fotocabina.models.Plantilla;
+import org.francalderon.app.fotocabina.models.PlantillaDTO;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 
@@ -12,7 +13,7 @@ public class ServiceManager {
     private static ServiceManager instance;
 
     private final EditorImagenes editorImagenes;
-    private final ArchivoService<List<String>> archivoTxtService;
+    private final ArchivoService<PlantillaDTO> archivoService;
     private final PlantillaService plantillaService;
     private final Plantilla plantilla;
     private final WebcamService webcamService;
@@ -21,16 +22,18 @@ public class ServiceManager {
         plantillaService = new PlantillaService();
         plantilla = new Plantilla();
         editorImagenes = new EditorImagenes();
-        archivoTxtService = new ArchivoTxtService();
+        archivoService = new ArchivoJsonService();
         webcamService = new WebcamService(640, 480, plantilla);
 
         editorImagenes.setPlantilla(plantilla);
-        ((BaseArchivoService)archivoTxtService).setPlantilla(plantilla);
+        ((BaseArchivoService) archivoService).setPlantilla(plantilla);
+        ((BaseArchivoService) archivoService).setPlantillaService(plantillaService);
         plantillaService.setPlantilla(plantilla);
         plantillaService.setEditorImagenes(editorImagenes);
-        plantillaService.setArchivoTxtService(archivoTxtService);
+        plantillaService.setArchivoService(archivoService);
         plantilla.setPlantillaService(plantillaService);
         plantilla.setEditorImagenes(editorImagenes);
+
 
     }
 
@@ -53,8 +56,8 @@ public class ServiceManager {
         return editorImagenes;
     }
 
-    public ArchivoService<List<String>> getArchivoService() {
-        return archivoTxtService;
+    public ArchivoService<PlantillaDTO> getArchivoService() {
+        return archivoService;
     }
 
     public PlantillaService getPlantillaService() {

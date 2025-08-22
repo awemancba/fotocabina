@@ -7,4 +7,6 @@ public interface ArchivoService<T> {
     T leerArchivo(File archivo);
     void guardarConfig();
     void actualizarConfig();
+    void cargarConfig(File archivo);
+    void cargarPlantilla();
 }

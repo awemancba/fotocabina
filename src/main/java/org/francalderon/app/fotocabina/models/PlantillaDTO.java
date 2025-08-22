@@ -3,20 +3,11 @@ package org.francalderon.app.fotocabina.models;
 import java.util.List;
 
 public class PlantillaDTO {
-    private int cantidadFotos;
     private String tamanioPlantilla;
     private String ubicacionFondo;
     private List<FotoDTO> fotos;
 
     public PlantillaDTO() {
-    }
-
-    public int getCantidadFotos() {
-        return cantidadFotos;
-    }
-
-    public void setCantidadFotos(int cantidadFotos) {
-        this.cantidadFotos = cantidadFotos;
     }
 
     public String getTamanioPlantilla() {

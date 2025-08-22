@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
+import org.francalderon.app.fotocabina.models.PlantillaDTO;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.ui.events.foto.AsignadorEventosFoto;
@@ -23,7 +24,7 @@ import java.util.Objects;
 public class PlantillaService {
     private Plantilla plantilla;
     private EditorImagenes editorImagenes;
-    private ArchivoService<List<String>> archivoTxtService;
+    private ArchivoService<PlantillaDTO> archivoService;
 
 
     public PlantillaService() {
@@ -37,8 +38,8 @@ public class PlantillaService {
         this.editorImagenes = editorImagenes;
     }
 
-    public void setArchivoTxtService(ArchivoService<List<String>> archivoTxtService) {
-        this.archivoTxtService = archivoTxtService;
+    public void setArchivoService(ArchivoService<PlantillaDTO> archivoService) {
+        this.archivoService = archivoService;
     }
 
     public void moverArriba() {
@@ -124,87 +125,27 @@ public class PlantillaService {
     }
 
     public void cambiarFondo() {
-        String urlImage = ArchivoTxtService.copyToResources(AdminVentanas.getPlantillaView());
-        Image nuevoFondo = new Image(urlImage);
-        plantilla.getFondo().setImage(nuevoFondo);
-        actualizarConfig();
+        String urlImage = ArchivoJsonService.copyToResources(AdminVentanas.getPlantillaView());
+        if (urlImage != null){
+            Image nuevoFondo = new Image(urlImage);
+            plantilla.getFondo().setImage(nuevoFondo);
+            actualizarConfig();
+        }else {
+            System.out.println("No se ha cargado unn imagen");
+        }
+
     }
 
     public void cargarPlantilla() {
-        File config = SelectorArchivo.seleccionarConfigFile(AdminVentanas.getPrimaryStage());
-        if (config!=null){
-            eliminarComponentes();
-            cargarConfig(config);
-            actualizarConfig();
-        }else {
-            System.out.println("El archivo no se ha cargado");
-        }
+        archivoService.cargarPlantilla();
     }
 
     public void actualizarConfig() {
-        archivoTxtService.actualizarConfig();
+        archivoService.actualizarConfig();
     }
 
     public void cargarConfig(File archivo) {
-        List<String> ultimaConfig = archivoTxtService.leerArchivo(archivo);
-        int cantidadFotos;
-        Image fondo;
-
-        if (ultimaConfig == null || ultimaConfig.size() < 3) {
-            ultimaConfig = new ArrayList<>();
-            cargarDatosDefault(ultimaConfig);
-        }
-
-        try {
-            cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
-        } catch (NumberFormatException e) {
-            ultimaConfig.clear();
-            cargarDatosDefault(ultimaConfig);
-            cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
-        }
-
-        if (ultimaConfig.size() < 3 + cantidadFotos) {
-            ultimaConfig.clear();
-            cargarDatosDefault(ultimaConfig);
-            cantidadFotos = Integer.parseInt(ultimaConfig.getFirst());
-        }
-
-        List<String> configuracion = ultimaConfig.subList(0, 3);
-        List<String> coordenadas = ultimaConfig.subList(3, ultimaConfig.size());
-
-        String tamanio = configuracion.get(1);
-        String urlFondo = configuracion.get(2);
-        fondo = new Image(urlFondo);
-
-        plantilla.getFondo().setImage(fondo);
-
-        for (int i = 0; i < cantidadFotos; i++) {
-            StackPane imagen = crearFotoDefault(i);
-            String[] coordenada = coordenadas.get(i).split(",");
-
-            double newX = Double.parseDouble(coordenada[0]);
-            double newY = Double.parseDouble(coordenada[1]);
-            double alto = Double.parseDouble(coordenada[2]);
-
-            if (alto == 0) {
-                alto = 200.0;
-            }
-            ((ImageView) imagen.getChildren().getFirst()).setFitHeight(alto);
-            imagen.setLayoutX(newX);
-            imagen.setLayoutY(newY);
-
-            plantilla.addImage(imagen);
-
-            AsignadorEventosFoto.selected(imagen, i, plantilla);
-            AsignadorEventosFoto.arrastrarFoto(this, imagen);
-
-
-        }
-        switch (tamanio) {
-            case "9x13" -> Platform.runLater(this::cambiarTam9x13);
-            case "10x15" -> Platform.runLater(this::cambiarTam10x15);
-            case "13x18" -> Platform.runLater(this::cambiarTam13x18);
-        }
+        archivoService.cargarConfig(archivo);
     }
 
     private void mover(int dx, int dy) {
@@ -218,13 +159,12 @@ public class PlantillaService {
         }
     }
 
-
     private void ajustarVentana() {
         Stage stage = (Stage) plantilla.getScene().getWindow();
         stage.sizeToScene();
     }
 
-    private StackPane crearFotoDefault(int numeroImagen) {
+    StackPane crearFotoDefault(int numeroImagen) {
         ImageView foto = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/img/fotoDefault.jpg")).toExternalForm()));
         foto.setFitHeight(200);
         foto.setPreserveRatio(true);
@@ -237,7 +177,7 @@ public class PlantillaService {
         return contenedor;
     }
 
-    private void cargarDatosDefault(List<String> ultimaConfig) {
+    void cargarDatosDefault(List<String> ultimaConfig) {
         ultimaConfig.clear();
         ultimaConfig.add("3");
         ultimaConfig.add("10x15");
@@ -247,7 +187,7 @@ public class PlantillaService {
         }
     }
 
-    private void eliminarComponentes() {
+    void eliminarComponentes() {
         List<Node> componentes = plantilla.getChildren();
         componentes.removeIf(node -> node instanceof Label || node instanceof StackPane);
         plantilla.getGaleria().clear();
