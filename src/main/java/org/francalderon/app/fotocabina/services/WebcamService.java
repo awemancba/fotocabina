@@ -1,4 +1,4 @@
-package org.francalderon.app.fotocabina.service;
+package org.francalderon.app.fotocabina.services;
 
 import com.github.sarxos.webcam.Webcam;
 import javafx.animation.KeyFrame;
@@ -8,9 +8,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import javafx.scene.control.Label;

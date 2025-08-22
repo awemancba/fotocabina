@@ -12,7 +12,6 @@ public class EditorImagenes {
     private Plantilla plantilla;
 
     public EditorImagenes() {
-
     }
 
     public void setPlantilla(Plantilla plantilla) {
@@ -22,7 +21,6 @@ public class EditorImagenes {
     public Plantilla getPlantilla() {
         return plantilla;
     }
-
 
     public void cambiarTamanio(int width) {
         Node nodo = plantilla.getGaleria().get(plantilla.getImgSelected()).getChildren().getFirst();

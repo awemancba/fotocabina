@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
-import org.francalderon.app.fotocabina.service.PlantillaService;
+import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 import org.francalderon.app.fotocabina.utils.EscaladorProporcional;
 
@@ -29,9 +29,10 @@ public class Plantilla extends Pane {
     private PlantillaService plantillaService;
     private TamanioFoto tamanioFoto;
     public static final String CONFIGURACION_TXT = System.getProperty("user.home") + "/.fotocabina/config.txt";
+    public static final String CONFIGURACION_JSON = System.getProperty("user.home") + "/.fotocabina/config.txt";
 
 
-    public Plantilla(EditorImagenes editor, PlantillaService plantillaService) {
+    public Plantilla() {
         tamanioFoto = TamanioFoto.FOTO_10x15;
 
         Image imgFondo = new Image(Objects.requireNonNull(getClass().getResource("/img/fondoDefault.jpg")).toExternalForm());
@@ -44,31 +45,20 @@ public class Plantilla extends Pane {
         this.fondo.setFitHeight(alto);
         this.setPrefSize(ancho, alto);
         this.getChildren().add(this.fondo);
-
-
-        this.plantillaService = plantillaService;
-
-        this.editorImagenes = editor;
-        editor.setPlantilla(this);
-        plantillaService.setPlantilla(this);
-        plantillaService.setEditorImagenes(editor);
-
-        File archivo = new File(CONFIGURACION_TXT);
-        plantillaService.cargarConfig(archivo);
     }
 
     public EditorImagenes getEditorImagenes() {
         return editorImagenes;
     }
 
+    public void setEditorImagenes(EditorImagenes editorImagenes) {
+        this.editorImagenes = editorImagenes;
+    }
 
     public ImageView getFondo() {
         return fondo;
     }
 
-    public void setFondo(ImageView fondo) {
-        this.fondo = fondo;
-    }
 
     public List<StackPane> getGaleria() {
         return galeria;
@@ -91,10 +81,6 @@ public class Plantilla extends Pane {
 
     public void setImgSelected(int imgSelected) {
         this.imgSelected = imgSelected;
-    }
-
-    public PlantillaService getPlantillaService() {
-        return plantillaService;
     }
 
     public void setPlantillaService(PlantillaService plantillaService) {

@@ -4,12 +4,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.service.PlantillaService;
+import org.francalderon.app.fotocabina.services.PlantillaService;
 
 import java.util.List;
 
 public class AsignadorEventosFoto {
-    public static void selected(StackPane imagen, int index, Plantilla plantilla){
+    public static void selected(StackPane imagen, int index, Plantilla plantilla) {
         imagen.setOnMouseClicked(e -> {
             plantilla.setImgSelected(index);
             List<StackPane> galeria = plantilla.getGaleria();
@@ -17,14 +17,18 @@ public class AsignadorEventosFoto {
                 StackPane stackPane = galeria.get(j);
                 for (Node nodo : stackPane.getChildren()) {
                     if (nodo instanceof Label) {
-                        nodo.setVisible(j == index);
+                        if (j == index) {
+                            ((Label) nodo).setText("Select " + (index + 1) );
+                        } else {
+                            ((Label) nodo).setText(String.valueOf(galeria.indexOf(stackPane) + 1 ));
+                        }
                     }
                 }
             }
         });
     }
 
-    public static void arrastrarFoto(PlantillaService plantillaService,StackPane imagen){
+    public static void arrastrarFoto(PlantillaService plantillaService, StackPane imagen) {
         final Delta delta = new Delta();
         imagen.setOnMousePressed(e2 -> {
             delta.x = e2.getSceneX() - imagen.getLayoutX();

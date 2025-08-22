@@ -14,20 +14,23 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.service.ArchivoService;
-import org.francalderon.app.fotocabina.service.PlantillaService;
-import org.francalderon.app.fotocabina.service.ServiceManager;
-import org.francalderon.app.fotocabina.service.WebcamService;
+import org.francalderon.app.fotocabina.services.ArchivoTxtService;
+import org.francalderon.app.fotocabina.services.PlantillaService;
+import org.francalderon.app.fotocabina.services.ServiceManager;
+import org.francalderon.app.fotocabina.services.WebcamService;
+import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.ui.events.foto.EliminarComponente;
 import org.francalderon.app.fotocabina.utils.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class MainViewController {
     @FXML
     Plantilla plantilla;
     EditorImagenes editorImagenes;
-    ArchivoService archivoService;
+    ArchivoService<List<String>> archivoTxtService;
     PlantillaService plantillaService;
     WebcamService webcamService;
 
@@ -35,10 +38,13 @@ public class MainViewController {
         ServiceManager serviceManager = ServiceManager.getInstance();
         plantilla = serviceManager.getPlantilla();
         editorImagenes = serviceManager.getEditorImagenes();
-        archivoService = serviceManager.getArchivoService();
+        archivoTxtService = serviceManager.getArchivoService();
         plantillaService = serviceManager.getPlantillaService();
         webcamService = serviceManager.getWebcamService();
         serviceManager.iniciarServicios();
+
+        File archivo = new File(Plantilla.CONFIGURACION_TXT);
+        plantillaService.cargarConfig(archivo);
 
         imageMiniPreview.imageProperty().bind(webcamService.getMiniPreview().imageProperty());
         plantillaLive.prefWidthProperty().bind(plantilla.prefWidthProperty());
@@ -128,7 +134,7 @@ public class MainViewController {
 
     @FXML
     protected void onGuardarPlantillaClick() {
-        archivoService.guardarConfig();
+        archivoTxtService.guardarConfig();
     }
 
     @FXML

@@ -2,9 +2,10 @@ package org.francalderon.app.fotocabina;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import org.francalderon.app.fotocabina.service.PlantillaService;
-import org.francalderon.app.fotocabina.service.ServiceManager;
+import org.francalderon.app.fotocabina.services.PlantillaService;
+import org.francalderon.app.fotocabina.services.ServiceManager;
 
 import java.io.IOException;
 
@@ -33,41 +34,62 @@ public class ImageControlViewController {
     Button btnAchicar;
 
     @FXML
-    Button bntAgrandar;
+    Button btnAgrandar;
 
     @FXML
     Label labelMover;
 
     @FXML
-    Label laberTam;
+    Label labelTam;
 
     @FXML
-    protected void OnArribaClick(){
-        plantillaService.moverArriba();
+    CheckBox selectAll;
+
+    @FXML
+    protected void OnArribaClick() {
+        if (selectAll.isSelected()) {
+            plantillaService.moverTodosArriba();
+        } else {
+            plantillaService.moverArriba();
+        }
+
     }
 
     @FXML
-    protected void OnAbajoClick(){
-        plantillaService.moverAbajo();
+    protected void OnAbajoClick() {
+        if (selectAll.isSelected()) {
+            plantillaService.moverTodosAbajo();
+        } else {
+            plantillaService.moverAbajo();
+        }
+
     }
 
     @FXML
-    protected void OnIzquierdaClick(){
-        plantillaService.moverIzquierda();
+    protected void OnIzquierdaClick() {
+        if (selectAll.isSelected()) {
+            plantillaService.moverTodosIzquierda();
+        } else {
+            plantillaService.moverIzquierda();
+        }
     }
 
     @FXML
-    protected void OnDerechaClick(){
-        plantillaService.moverDerecha();
+    protected void OnDerechaClick() {
+        if (selectAll.isSelected()) {
+            plantillaService.moverTodosDerecha();
+        } else {
+            plantillaService.moverDerecha();
+        }
     }
 
     @FXML
-    protected void OnAgrandarClick(){
+    protected void OnAgrandarClick() {
         plantillaService.agrandarFoto();
     }
 
     @FXML
-    protected void OnAchicarClick(){
+    protected void OnAchicarClick() {
         plantillaService.achicarFoto();
     }
 }

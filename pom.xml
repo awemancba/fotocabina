@@ -15,7 +15,13 @@
     </properties>
 
     <dependencies>
-        <!-- Controles visuales como Button, Label, etc. -->
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -40,7 +46,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>24.0.2</version>
-            <classifier>win</classifier> <!-- Cambiar por mac o linux según tu sistema -->
+            <classifier>win</classifier>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>

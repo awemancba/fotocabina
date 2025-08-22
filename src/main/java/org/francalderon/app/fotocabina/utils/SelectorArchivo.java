@@ -8,30 +8,30 @@ import java.io.File;
 
 public class SelectorArchivo {
     public static Image seleccionarImagen(Stage stage) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Cambiar fondo");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif")
-        );
-
-        File archivo = fileChooser.showOpenDialog(stage);
-
+        File archivo = cargarArchivo(stage,"Imagenes","*.png", "*.jpg", "*.jpeg", "*.gif");
         if (archivo != null) {
             return new Image(archivo.toURI().toString());
         }
+        System.out.println("No se ha cargado un fondo");
         return null;
     }
 
     public static File seleccionarImagenFile(Stage stage) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar imagen");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif"));
-        return fileChooser.showOpenDialog(stage);
+        return cargarArchivo(stage,"Imagenes","*.png", "*.jpg", "*.jpeg", "*.gif");
     }
 
     public static File seleccionarConfigFile(Stage stage) {
+        return cargarArchivo(stage,"Plantilla","*.txt");
+    }
+
+    public static File seleccionarConfigJson(Stage stage){
+        return cargarArchivo(stage,"Plantilla","*.json");
+    }
+
+    private static File cargarArchivo(Stage stage,String descripcion, String... extensions) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar archivo");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Plantilla", "*.txt"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(descripcion, extensions));
         return fileChooser.showOpenDialog(stage);
     }
 

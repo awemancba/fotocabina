@@ -8,8 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.francalderon.app.fotocabina.service.ServiceManager;
-import org.francalderon.app.fotocabina.service.WebcamService;
+import org.francalderon.app.fotocabina.services.ServiceManager;
+import org.francalderon.app.fotocabina.services.WebcamService;
 import org.francalderon.app.fotocabina.utils.FullScreen;
 
 import java.io.IOException;
