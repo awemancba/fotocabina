@@ -120,7 +120,7 @@ public class PlantillaService {
         plantilla.deleteImage();
         actualizarConfig();
         eliminarComponentes();
-        File archivo = new File(Plantilla.CONFIGURACION_TXT);
+        File archivo = new File(Plantilla.CONFIGURACION_JSON);
         cargarConfig(archivo);
     }
 
