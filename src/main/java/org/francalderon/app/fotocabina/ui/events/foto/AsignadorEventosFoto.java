@@ -1,5 +1,6 @@
 package org.francalderon.app.fotocabina.ui.events.foto;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -31,18 +32,19 @@ public class AsignadorEventosFoto {
     public static void arrastrarFoto(PlantillaService plantillaService, StackPane imagen) {
         final Delta delta = new Delta();
         imagen.setOnMousePressed(e2 -> {
-            delta.x = e2.getSceneX() - imagen.getLayoutX();
-            delta.y = e2.getSceneY() - imagen.getLayoutY();
+            Point2D local = imagen.getParent().sceneToLocal(e2.getSceneX(),e2.getSceneY());
+            delta.x = local.getX() - imagen.getLayoutX();
+            delta.y = local.getY() - imagen.getLayoutY();
             plantillaService.actualizarConfig();
         });
 
         imagen.setOnMouseDragged(e3 -> {
-            imagen.setLayoutX(e3.getSceneX() - delta.x);
-            imagen.setLayoutY(e3.getSceneY() - delta.y);
+            Point2D local = imagen.getParent().sceneToLocal(e3.getSceneX(),e3.getSceneY());
+            imagen.setLayoutX(local.getX() - delta.x);
+            imagen.setLayoutY(local.getY() - delta.y);
             plantillaService.actualizarConfig();
         });
     }
-
 
     private static class Delta {
         double x, y;

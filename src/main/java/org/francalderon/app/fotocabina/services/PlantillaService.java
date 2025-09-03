@@ -159,7 +159,7 @@ public class PlantillaService {
         }
     }
 
-    private void ajustarVentana() {
+    public void ajustarVentana() {
         Stage stage = (Stage) plantilla.getScene().getWindow();
         stage.sizeToScene();
     }

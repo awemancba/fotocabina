@@ -1,5 +1,6 @@
 package org.francalderon.app.fotocabina.models;
 
+import com.sun.javafx.geom.Dimension;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -30,6 +31,7 @@ public class Plantilla extends Pane {
     private TamanioFoto tamanioFoto;
     public static final String CONFIGURACION_TXT = System.getProperty("user.home") + "/.fotocabina/config.txt";
     public static final String CONFIGURACION_JSON = System.getProperty("user.home") + "/.fotocabina/config.json";
+    public static final int ALTO_BARRA_TITULO = 20;
 
 
     public Plantilla() {
@@ -37,8 +39,11 @@ public class Plantilla extends Pane {
 
         Image imgFondo = new Image(Objects.requireNonNull(getClass().getResource("/img/fondoDefault.jpg")).toExternalForm());
 
-        double alto = Screen.getPrimary().getVisualBounds().getHeight();
+        double alto = Screen.getPrimary().getVisualBounds().getHeight() - ALTO_BARRA_TITULO;
         double ancho = EscaladorProporcional.calcularAncho(imgFondo.getWidth(), imgFondo.getHeight(), alto).getWidth();
+
+        System.out.println("ancho = " + ancho);
+        System.out.println("alto = " + alto);
 
         this.fondo = new ImageView();
         this.fondo.setFitWidth(ancho);

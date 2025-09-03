@@ -8,7 +8,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.Comparator;
-import java.util.List;
 
 
 public class FullScreen {
