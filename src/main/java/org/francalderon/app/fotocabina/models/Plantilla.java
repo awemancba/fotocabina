@@ -1,5 +1,6 @@
 package org.francalderon.app.fotocabina.models;
 
+import com.sun.javafx.geom.Dimension;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -8,12 +9,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
-import org.francalderon.app.fotocabina.service.PlantillaService;
+import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 import org.francalderon.app.fotocabina.utils.EscaladorProporcional;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,45 +29,41 @@ public class Plantilla extends Pane {
     private EditorImagenes editorImagenes;
     private PlantillaService plantillaService;
     private TamanioFoto tamanioFoto;
+    public static final String CONFIGURACION_TXT = System.getProperty("user.home") + "/.fotocabina/config.txt";
+    public static final String CONFIGURACION_JSON = System.getProperty("user.home") + "/.fotocabina/config.json";
+    public static final int ALTO_BARRA_TITULO = 20;
 
 
-    public Plantilla(EditorImagenes editor, PlantillaService plantillaService) {
+    public Plantilla() {
         tamanioFoto = TamanioFoto.FOTO_10x15;
 
         Image imgFondo = new Image(Objects.requireNonNull(getClass().getResource("/img/fondoDefault.jpg")).toExternalForm());
 
-        double alto = Screen.getPrimary().getVisualBounds().getHeight();
+        double alto = Screen.getPrimary().getVisualBounds().getHeight() - ALTO_BARRA_TITULO;
         double ancho = EscaladorProporcional.calcularAncho(imgFondo.getWidth(), imgFondo.getHeight(), alto).getWidth();
 
-        this.fondo = new ImageView(imgFondo);
+        System.out.println("ancho = " + ancho);
+        System.out.println("alto = " + alto);
+
+        this.fondo = new ImageView();
         this.fondo.setFitWidth(ancho);
         this.fondo.setFitHeight(alto);
         this.setPrefSize(ancho, alto);
         this.getChildren().add(this.fondo);
-
-
-        this.plantillaService = plantillaService;
-
-        this.editorImagenes = editor;
-        editor.setPlantilla(this);
-        plantillaService.setPlantilla(this);
-        plantillaService.setEditorImagenes(editor);
-
-        plantillaService.cargarUltimaConfig();
     }
 
     public EditorImagenes getEditorImagenes() {
         return editorImagenes;
     }
 
+    public void setEditorImagenes(EditorImagenes editorImagenes) {
+        this.editorImagenes = editorImagenes;
+    }
 
     public ImageView getFondo() {
         return fondo;
     }
 
-    public void setFondo(ImageView fondo) {
-        this.fondo = fondo;
-    }
 
     public List<StackPane> getGaleria() {
         return galeria;
@@ -88,10 +86,6 @@ public class Plantilla extends Pane {
 
     public void setImgSelected(int imgSelected) {
         this.imgSelected = imgSelected;
-    }
-
-    public PlantillaService getPlantillaService() {
-        return plantillaService;
     }
 
     public void setPlantillaService(PlantillaService plantillaService) {

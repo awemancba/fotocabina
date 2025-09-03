@@ -47,7 +47,7 @@
          <children>
             <VBox>
                <children>
-                  <CheckBox mnemonicParsing="false" text="Modificar todo" />
+                  <CheckBox fx:id="selectAll" mnemonicParsing="false" text="Seleccionar Todo" />
                </children>
             </VBox>
             <VBox layoutX="10.0" layoutY="10.0">

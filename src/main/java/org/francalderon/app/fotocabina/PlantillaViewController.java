@@ -1,18 +1,13 @@
 package org.francalderon.app.fotocabina;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.service.ArchivoService;
-import org.francalderon.app.fotocabina.service.PlantillaService;
-import org.francalderon.app.fotocabina.service.ServiceManager;
-import org.francalderon.app.fotocabina.utils.AdminVentanas;
+import org.francalderon.app.fotocabina.services.PlantillaService;
+import org.francalderon.app.fotocabina.services.ServiceManager;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 
 public class PlantillaViewController {
     @FXML
@@ -48,9 +43,7 @@ public class PlantillaViewController {
 
     @FXML
     protected void onCambiarFondoClick() {
-        String urlImage = ArchivoService.copyToResources(AdminVentanas.getPlantillaView());
-        Image nuevoFondo = new Image(urlImage);
-        Platform.runLater(() -> plantilla.getFondo().setImage(nuevoFondo));
+        plantillaService.cambiarFondo();
     }
 
     @FXML

@@ -1,36 +1,36 @@
 package org.francalderon.app.fotocabina;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
+import javafx.scene.layout.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.service.ArchivoService;
-import org.francalderon.app.fotocabina.service.PlantillaService;
-import org.francalderon.app.fotocabina.service.ServiceManager;
-import org.francalderon.app.fotocabina.service.WebcamService;
+import org.francalderon.app.fotocabina.models.PlantillaDTO;
+import org.francalderon.app.fotocabina.services.PlantillaService;
+import org.francalderon.app.fotocabina.services.ServiceManager;
+import org.francalderon.app.fotocabina.services.WebcamService;
+import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.ui.events.foto.EliminarComponente;
 import org.francalderon.app.fotocabina.utils.*;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 public class MainViewController {
     @FXML
     Plantilla plantilla;
     EditorImagenes editorImagenes;
-    ArchivoService archivoService;
+    ArchivoService<PlantillaDTO> archivoService;
     PlantillaService plantillaService;
     WebcamService webcamService;
 
@@ -43,19 +43,33 @@ public class MainViewController {
         webcamService = serviceManager.getWebcamService();
         serviceManager.iniciarServicios();
 
+        File archivo = new File(Plantilla.CONFIGURACION_JSON);
+        plantillaService.cargarConfig(archivo);
+
         imageMiniPreview.imageProperty().bind(webcamService.getMiniPreview().imageProperty());
         plantillaLive.prefWidthProperty().bind(plantilla.prefWidthProperty());
         plantillaLive.prefHeightProperty().bind(plantilla.prefHeightProperty());
         plantillaLive.getChildren().add(plantilla);
 
+        controles.setMaxHeight(Screen.getPrimary().getVisualBounds().getHeight() - Plantilla.ALTO_BARRA_TITULO);
+
+
         Platform.runLater(() -> {
+            aplicarEstilos();
+            ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> {
+                aplicarEstilos();
+            };
+
+            obtenerStage().widthProperty().addListener(stageSizeListener);
+            obtenerStage().heightProperty().addListener(stageSizeListener);
+
+
             Scene scene = btnPlantilla.getScene();
             Stage stage = (Stage) scene.getWindow();
             EliminarComponente.foto(stage, scene, plantillaService);
-
-            obtenerStage().setOnCloseRequest(e->{
+            obtenerStage().setOnCloseRequest(e -> {
                 webcamService.stop();
-                if (AdminVentanas.getVentanaVivo() != null){
+                if (AdminVentanas.getVentanaVivo() != null) {
                     AdminVentanas.getVentanaVivo().close();
                 }
             });
@@ -65,31 +79,61 @@ public class MainViewController {
     }
 
     @FXML
+    private void aplicarEstilos() {
+        for (Node nodo : botones.getChildren()) {
+            double altoStage = obtenerStage().getHeight();
+            if (altoStage < 800) {
+                nodo.getStyleClass().clear();
+                nodo.getStyleClass().add("boton-control-menor");
+                ((Button) nodo).getGraphic().getStyleClass().clear();
+                ((Button) nodo).getGraphic().getStyleClass().add("img-boton-menor");
+            } else if (altoStage < 900) {
+                nodo.getStyleClass().clear();
+                nodo.getStyleClass().add("boton-control-medio");
+                ((Button) nodo).getGraphic().getStyleClass().clear();
+                ((Button) nodo).getGraphic().getStyleClass().add("img-boton-medio");
+            } else {
+                nodo.getStyleClass().clear();
+                nodo.getStyleClass().add("boton-control");
+                ((Button) nodo).getGraphic().getStyleClass().clear();
+                ((Button) nodo).getGraphic().getStyleClass().add("img-boton");
+            }
+            nodo.getStyleClass().add("color-primario");
+        }
+    }
+
+    @FXML
+    private GridPane botones;
+
+    @FXML
     private CheckBox openLive;
 
     @FXML
     private Label labelMiniPreview;
 
     @FXML
+    private Button btnVerFotos;
+
+    @FXML
+    private Button btnCaptura;
+
+    @FXML
     private Button btnPlantilla;
 
     @FXML
-    private Button btnTamanio;
+    Button btnFotos;
 
     @FXML
-    private Button btnFondo;
+    private Button btnGuardarPlantilla;
+
+    @FXML
+    private Button btnCargarPlantilla;
 
     @FXML
     private Button btnImprimir;
 
     @FXML
-    private Button btnFotos;
-
-    @FXML
     private Button btnAjustes;
-
-    @FXML
-    private Button btnCaptura;
 
     @FXML
     private HBox contenedorPrincipal;
@@ -128,21 +172,13 @@ public class MainViewController {
     }
 
     @FXML
-    protected void onTamanioClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ImageControlView.fxml"));
-            Parent root = loader.load();
+    protected void onGuardarPlantillaClick() {
+        archivoService.guardarConfig();
+    }
 
-            Stage nuevaVentana = new Stage();
-            nuevaVentana.setTitle("Ventana secundaria");
-            nuevaVentana.initOwner(obtenerStage());
-            nuevaVentana.initModality(Modality.NONE);
-            nuevaVentana.setAlwaysOnTop(true);
-            nuevaVentana.setScene(new Scene(root));
-            nuevaVentana.show();
-        } catch (IOException ex) {
-            throw new RuntimeException();
-        }
+    @FXML
+    protected void onCargarPlantillaClick() {
+        plantillaService.cargarPlantilla();
     }
 
     @FXML
@@ -151,20 +187,20 @@ public class MainViewController {
     }
 
     @FXML
-    protected void onFotosClick() {
+    protected void onVerFotosClick() {
         AbrirCarpeta.verFotos();
     }
 
     @FXML
-    protected void onFondoClick() {
-
+    protected void onFotosClick() throws IOException {
+        AdminVentanas.imageControlView(obtenerStage());
     }
 
     @FXML
     protected void onAjustesClick() {
         Stage stage = (Stage) btnAjustes.getScene().getWindow();
-        Image nuevoIcono = SelectorImagen.seleccionarImagen(stage);
-        if (nuevoIcono != null){
+        Image nuevoIcono = SelectorArchivo.seleccionarImagen(stage);
+        if (nuevoIcono != null) {
             webcamService.getIcono().setImage(nuevoIcono);
         } else {
             System.out.println("No se puede cargar la imagen");

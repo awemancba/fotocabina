@@ -12,6 +12,8 @@ import java.io.IOException;
 public class AdminVentanas {
     private static Stage ventanaVivo;
     private static Stage plantillaView;
+    private static Stage imgaeControl;
+    private static Stage primaryStage;
 
     public static void toggleLiveWindow(CheckBox checkBox) throws IOException {
         if (checkBox.isSelected()) {
@@ -55,11 +57,37 @@ public class AdminVentanas {
 
     }
 
+    public static void imageControlView(Stage stage) throws IOException {
+        if (imgaeControl == null || !imgaeControl.isShowing()) {
+            FXMLLoader loader = new FXMLLoader(AdminVentanas.class.getResource("/fxml/ImageControlView.fxml"));
+            Parent root = loader.load();
+
+            imgaeControl = new Stage();
+            imgaeControl.setTitle("Controles Imagen");
+            imgaeControl.initOwner(stage);
+            imgaeControl.initModality(Modality.NONE);
+            imgaeControl.setAlwaysOnTop(true);
+            imgaeControl.setScene(new Scene(root));
+            imgaeControl.show();
+        } else {
+            imgaeControl.close();
+            imgaeControl = null;
+        }
+    }
+
     public static Stage getVentanaVivo() {
         return ventanaVivo;
     }
 
     public static  Stage getPlantillaView(){
         return plantillaView;
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static void setPrimaryStage(Stage primaryStage) {
+        AdminVentanas.primaryStage = primaryStage;
     }
 }
