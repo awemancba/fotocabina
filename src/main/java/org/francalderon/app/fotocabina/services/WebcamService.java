@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.util.Duration;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import javafx.scene.control.Label;
+import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.ui.events.foto.DesactivarNodo;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 import org.francalderon.app.fotocabina.utils.ExportarPlantilla;
@@ -30,9 +31,8 @@ public class WebcamService {
     private boolean running = false;
     private Plantilla plantilla;
     private ImageView icono;
-    private Timeline timeline;
-    private Timeline timeLineInterno;
     private Label countDown;
+    private AspectRatio aspectRatio;
 
     public WebcamService(int width, int height, Plantilla plantilla) {
         this.plantilla = plantilla;
@@ -42,6 +42,7 @@ public class WebcamService {
 
         webcam = Webcam.getDefault();
         webcam.setViewSize(new Dimension(width, height));
+
         imageView = new ImageView();
         miniPreview = new ImageView();
         for (Dimension d : webcam.getViewSizes()) {
@@ -59,7 +60,7 @@ public class WebcamService {
                 BufferedImage original = webcam.getImage();
                 if (original != null) {
                     BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(original);
-                    BufferedImage recortado = EditorImagenes.recortar13to10(mirrored);
+                    BufferedImage recortado = EditorImagenes.recortarApectRatio(mirrored, aspectRatio);
                     Image fxImage = SwingFXUtils.toFXImage(recortado, null);
                     Image fxImage2 = SwingFXUtils.toFXImage(recortado, null);
                     Platform.runLater(() -> {
@@ -93,7 +94,7 @@ public class WebcamService {
         this.imageView = imageView;
     }
 
-    public ImageView getView() {
+    public ImageView getImageView() {
         return imageView;
     }
 
@@ -109,12 +110,20 @@ public class WebcamService {
         this.countDown = countDownLabel;
     }
 
-    public void setIcono(ImageView imageView){
+    public void setIcono(ImageView imageView) {
         this.icono = imageView;
     }
 
-    public ImageView getIcono(){
+    public ImageView getIcono() {
         return icono;
+    }
+
+    public AspectRatio getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public void setAspectRatio(AspectRatio aspectRatio) {
+        this.aspectRatio = aspectRatio;
     }
 
     public boolean isRunning() {
@@ -123,14 +132,14 @@ public class WebcamService {
 
     public void temporizador(double tiempo, Runnable cuandoTermina) {
         int[] temporizador = {3};
-        timeline = new Timeline(
+        Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0), e -> countDown.setText("Preparense")
                         , new KeyValue(countDown.opacityProperty(), 1.0)),
 
                 new KeyFrame(Duration.seconds(tiempo), temp0 -> countDown.setText(""), new KeyValue(countDown.opacityProperty(), 0.0)),
 
                 new KeyFrame(Duration.seconds(tiempo + 1), e -> {
-                    timeLineInterno = new Timeline(
+                    Timeline timeLineInterno = new Timeline(
                             new KeyFrame(Duration.seconds(0), temp -> {
                                 if (temporizador[0] > 0) {
                                     countDown.setText(String.valueOf(temporizador[0]));
@@ -169,7 +178,7 @@ public class WebcamService {
 
                 BufferedImage imagen = webcam.getImage();
                 BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(imagen);
-                BufferedImage recortado = EditorImagenes.recortar13to10(mirrored);
+                BufferedImage recortado = EditorImagenes.recortarApectRatio(mirrored, aspectRatio);
                 fotos.add(recortado);
             }
             this.plantilla.setGaleria(fotos);

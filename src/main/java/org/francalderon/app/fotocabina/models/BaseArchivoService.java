@@ -2,6 +2,7 @@ package org.francalderon.app.fotocabina.models;
 
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.services.PlantillaService;
+import org.francalderon.app.fotocabina.services.WebcamService;
 import org.francalderon.app.fotocabina.utils.SelectorArchivo;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 public abstract class BaseArchivoService {
     protected Plantilla plantilla;
     protected PlantillaService plantillaService;
+    protected WebcamService webcamService;
     public static final Path RESOURCES = Paths.get(System.getProperty("user.home"), ".fotocabina", "resources");
     public static final Path FOTOCABINA = Paths.get(System.getProperty("user.home"), ".fotocabina");
 
@@ -77,5 +79,9 @@ public abstract class BaseArchivoService {
 
     public void setPlantillaService(PlantillaService plantillaService) {
         this.plantillaService = plantillaService;
+    }
+
+    public void setWebcamService(WebcamService webcamService) {
+        this.webcamService = webcamService;
     }
 }

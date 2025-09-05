@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -109,9 +108,6 @@ public class MainViewController {
     private CheckBox openLive;
 
     @FXML
-    private Label labelMiniPreview;
-
-    @FXML
     private Button btnVerFotos;
 
     @FXML
@@ -205,6 +201,11 @@ public class MainViewController {
         } else {
             System.out.println("No se puede cargar la imagen");
         }
+    }
+
+    @FXML
+    protected void OnEstirarVivoClick(){
+
     }
 
     private Stage obtenerStage() {

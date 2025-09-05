@@ -1,10 +1,13 @@
 package org.francalderon.app.fotocabina.models;
 
+import org.francalderon.app.fotocabina.models.enums.AspectRatio;
+
 import java.util.List;
 
 public class PlantillaDTO {
     private String tamanioPlantilla;
     private String ubicacionFondo;
+    private AspectRatio aspectRatio;
     private List<FotoDTO> fotos;
 
     public PlantillaDTO() {
@@ -32,5 +35,13 @@ public class PlantillaDTO {
 
     public void setFotos(List<FotoDTO> fotos) {
         this.fotos = fotos;
+    }
+
+    public void setAspectRatio(AspectRatio aspectRatio) {
+        this.aspectRatio = aspectRatio;
+    }
+
+    public AspectRatio getAspectRatio() {
+        return aspectRatio;
     }
 }

@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.francalderon.app.fotocabina.models.Plantilla;
+import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -22,35 +23,36 @@ public class EditorImagenes {
         return plantilla;
     }
 
-    public void cambiarTamanio(int width) {
+    public void cambiarTamanio(double width, double height) {
         Node nodo = plantilla.getGaleria().get(plantilla.getImgSelected()).getChildren().getFirst();
         ImageView imageView = (ImageView) nodo;
-        double largoActual = imageView.getFitHeight();
-        System.out.println(largoActual);
-        imageView.setFitHeight(largoActual + width);
+        double altoActual = imageView.getFitHeight();
+        double anchoActual = imageView.getFitWidth();
+        imageView.setFitHeight(altoActual + height);
+        imageView.setFitWidth(anchoActual + width);
     }
 
-    public static BufferedImage recortarApectRatio(BufferedImage imagen, Double aspectRatioWidth, Double aspectRatioHeight) {
+    public static BufferedImage recortarApectRatio(BufferedImage imagen, AspectRatio aspectRatio) {
         if (imagen == null) {
             throw new IllegalArgumentException("La imagen no puede ser null");
         }
 
-        if (aspectRatioWidth == null || aspectRatioHeight == null || aspectRatioWidth <= 0 || aspectRatioHeight <= 0) {
+        if (aspectRatio.getAspectWidth() == null || aspectRatio.getAspectHeight() == null || aspectRatio.getAspectWidth() <= 0 || aspectRatio.getAspectHeight() <= 0) {
             throw new IllegalArgumentException("Aspect ratio inválido: ancho y largo deben ser mayores a cero");
         }
 
         int originalHeight = imagen.getHeight();
         int originalWidth = imagen.getWidth();
 
-        double targetRatio = aspectRatioWidth / aspectRatioHeight;
-        double originalRatio = (double) originalWidth / originalHeight;
+        double targetRatio = aspectRatio.getAspectRatio();
 
         int recorteWidth, recorteHeight;
         int x, y;
 
-        if (originalRatio > targetRatio) {
-            recorteHeight = originalHeight;
-            recorteWidth = (int) Math.round(recorteHeight * targetRatio);
+        recorteHeight = originalHeight;
+        recorteWidth = (int) Math.round(recorteHeight * targetRatio);
+
+        if (recorteWidth <= originalWidth) {
             x = (originalWidth - recorteWidth) / 2;
             y = 0;
 
@@ -74,10 +76,6 @@ public class EditorImagenes {
                 null);
         g.dispose();
         return espejo;
-    }
-
-    public static BufferedImage recortar13to10(BufferedImage imagen) {
-        return EditorImagenes.recortarApectRatio(imagen, 13.0, 10.0);
     }
 
     public void cambiarPosicion(double dx, double dy) {

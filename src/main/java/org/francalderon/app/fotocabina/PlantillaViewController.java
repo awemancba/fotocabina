@@ -21,25 +21,25 @@ public class PlantillaViewController {
     }
 
     @FXML
-    Button btnCambiarFondo;
+    private Button btnCambiarFondo;
 
     @FXML
-    Button btn9x13;
+    private Button btn9x13;
 
     @FXML
-    Button btn10x15;
+    private Button btn10x15;
 
     @FXML
-    Button btn13x18;
+    private Button btn13x18;
 
     @FXML
-    ImageView image1;
+    private ImageView image1;
 
     @FXML
-    ImageView image2;
+    private ImageView image2;
 
     @FXML
-    ImageView image3;
+    private ImageView image3;
 
     @FXML
     protected void onCambiarFondoClick() {

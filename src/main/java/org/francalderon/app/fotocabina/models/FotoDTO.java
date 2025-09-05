@@ -16,7 +16,6 @@ public class FotoDTO {
         this.alto = alto;
     }
 
-
     public double getX() {
         return X;
     }

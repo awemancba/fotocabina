@@ -10,6 +10,7 @@ import org.francalderon.app.fotocabina.models.BaseArchivoService;
 import org.francalderon.app.fotocabina.models.FotoDTO;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import org.francalderon.app.fotocabina.models.PlantillaDTO;
+import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.ui.events.foto.AsignadorEventosFoto;
 import org.francalderon.app.fotocabina.utils.AdminVentanas;
@@ -67,6 +68,7 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
 
         plantillaDTO.setTamanioPlantilla(plantilla.getTamanioFoto().getNombre());
         plantillaDTO.setUbicacionFondo(plantilla.getFondo().getImage().getUrl());
+        plantillaDTO.setAspectRatio(plantillaService.getWebcamService().getAspectRatio());
 
         for (StackPane foto : fotos) {
             for (Node nodo : foto.getChildren()) {
@@ -107,11 +109,14 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
             plantillaDTO = leerArchivo(archivo);
         }
 
+        AspectRatio aspectRatio = plantillaDTO.getAspectRatio();
         String tamanio = plantillaDTO.getTamanioPlantilla();
         String fondo = plantillaDTO.getUbicacionFondo();
         List<FotoDTO> fotos = plantillaDTO.getFotos();
 
+        webcamService.setAspectRatio(aspectRatio);
         plantilla.getFondo().setImage(new Image(fondo));
+
         switch (tamanio) {
             case "9x13" -> Platform.runLater(() -> plantillaService.cambiarTam9x13());
             case "10x15" -> Platform.runLater(() -> plantillaService.cambiarTam10x15());
@@ -128,6 +133,7 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
             foto.setLayoutX(x);
             foto.setLayoutY(y);
             ((ImageView) foto.getChildren().getFirst()).setFitHeight(alto);
+            ((ImageView) foto.getChildren().getFirst()).setFitWidth(alto * (aspectRatio.getAspectRatio()));
 
             plantilla.addImage(foto);
             AsignadorEventosFoto.selected(foto, i, plantilla);

@@ -28,11 +28,14 @@ public class ServiceManager {
         editorImagenes.setPlantilla(plantilla);
         ((BaseArchivoService) archivoService).setPlantilla(plantilla);
         ((BaseArchivoService) archivoService).setPlantillaService(plantillaService);
+        ((BaseArchivoService) archivoService).setWebcamService(webcamService);
         plantillaService.setPlantilla(plantilla);
         plantillaService.setEditorImagenes(editorImagenes);
         plantillaService.setArchivoService(archivoService);
+        plantillaService.setWebcamService(webcamService);
         plantilla.setPlantillaService(plantillaService);
         plantilla.setEditorImagenes(editorImagenes);
+
 
 
     }

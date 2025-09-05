@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import org.francalderon.app.fotocabina.models.PlantillaDTO;
+import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.ui.events.foto.AsignadorEventosFoto;
@@ -25,6 +26,7 @@ public class PlantillaService {
     private Plantilla plantilla;
     private EditorImagenes editorImagenes;
     private ArchivoService<PlantillaDTO> archivoService;
+    private WebcamService webcamService;
 
 
     public PlantillaService() {
@@ -40,6 +42,14 @@ public class PlantillaService {
 
     public void setArchivoService(ArchivoService<PlantillaDTO> archivoService) {
         this.archivoService = archivoService;
+    }
+
+    public void setWebcamService(WebcamService webcamService) {
+        this.webcamService = webcamService;
+    }
+
+    public WebcamService getWebcamService() {
+        return webcamService;
     }
 
     public void moverArriba() {
@@ -80,12 +90,12 @@ public class PlantillaService {
 
 
     public void agrandarFoto() {
-        editorImagenes.cambiarTamanio(5);
+        editorImagenes.cambiarTamanio(5 , 5 / webcamService.getAspectRatio().getAspectRatio());
         actualizarConfig();
     }
 
     public void achicarFoto() {
-        editorImagenes.cambiarTamanio(-5);
+        editorImagenes.cambiarTamanio(-5,-5 / webcamService.getAspectRatio().getAspectRatio() );
         actualizarConfig();
     }
 
@@ -107,6 +117,31 @@ public class PlantillaService {
         ajustarVentana();
     }
 
+    public void cambiarFotos1_1() {
+        plantilla.getGaleria().forEach(stackPane ->
+                stackPane.getChildren().stream()
+                        .filter(node -> node instanceof ImageView)
+                        .findFirst()
+                        .ifPresent(imageView -> ((ImageView)imageView).setFitWidth(((ImageView)imageView).getFitHeight())));
+    }
+
+    public void cambiarFotos4_3() {
+        plantilla.getGaleria().forEach(stackPane ->
+                stackPane.getChildren().stream()
+                        .filter(node -> node instanceof ImageView)
+                        .findFirst()
+                        .ifPresent(imageView -> ((ImageView)imageView).setFitWidth(((ImageView)imageView).getFitHeight() * (4.0 / 3))));
+    }
+
+    public void cambiarFotos16_9() {
+        plantilla.getGaleria().forEach(stackPane ->
+                stackPane.getChildren().stream()
+                        .filter(node -> node instanceof ImageView)
+                        .findFirst()
+                        .ifPresent(imageView -> ((ImageView)imageView).setFitWidth(((ImageView)imageView).getFitHeight() * (16.0 / 9))));
+    }
+
+
     public void agregarFoto() {
         int numeroFoto = plantilla.getGaleria().size();
         StackPane nuevaFoto = crearFotoDefault(numeroFoto);
@@ -126,11 +161,11 @@ public class PlantillaService {
 
     public void cambiarFondo() {
         String urlImage = ArchivoJsonService.copyToResources(AdminVentanas.getPlantillaView());
-        if (urlImage != null){
+        if (urlImage != null) {
             Image nuevoFondo = new Image(urlImage);
             plantilla.getFondo().setImage(nuevoFondo);
             actualizarConfig();
-        }else {
+        } else {
             System.out.println("No se ha cargado unn imagen");
         }
 
@@ -166,8 +201,10 @@ public class PlantillaService {
 
     StackPane crearFotoDefault(int numeroImagen) {
         ImageView foto = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/img/fotoDefault.jpg")).toExternalForm()));
+
+        AspectRatio aspectRatio = webcamService.getAspectRatio();
         foto.setFitHeight(200);
-        foto.setPreserveRatio(true);
+        foto.setFitWidth(200 * (aspectRatio.getAspectRatio()));
 
         Label selected = new Label(String.valueOf(numeroImagen + 1));
         selected.setStyle("-fx-text-fill: white;-fx-font-size: 32px;-fx-text-fill: rgba(255,255,255,0.5)");

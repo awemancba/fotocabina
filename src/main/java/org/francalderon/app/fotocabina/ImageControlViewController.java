@@ -4,8 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.services.ServiceManager;
+import org.francalderon.app.fotocabina.services.WebcamService;
 
 import java.io.IOException;
 
@@ -13,37 +15,49 @@ import java.io.IOException;
 public class ImageControlViewController {
     @FXML
     PlantillaService plantillaService;
+    WebcamService webcamService;
 
     public void initialize() throws IOException {
         plantillaService = ServiceManager.getInstance().getPlantillaService();
+        webcamService = ServiceManager.getInstance().getWebcamService();
     }
 
     @FXML
-    Button btnArriba;
+    private Button btnArriba;
 
     @FXML
-    Button btnAbajo;
+    private Button btnAbajo;
 
     @FXML
-    Button btnIzquierda;
+    private Button btnIzquierda;
 
     @FXML
-    Button btnDerecha;
+    private Button btnDerecha;
 
     @FXML
-    Button btnAchicar;
+    private Button btnAchicar;
 
     @FXML
-    Button btnAgrandar;
+    private Button btnAgrandar;
 
     @FXML
-    Label labelMover;
+    private Label labelMover;
 
     @FXML
-    Label labelTam;
+    private Label labelTam;
 
     @FXML
-    CheckBox selectAll;
+    private CheckBox selectAll;
+
+    @FXML
+    private Button aspect1_1;
+
+    @FXML
+    private Button aspect4_3;
+
+    @FXML
+    private Button aspect16_9;
+
 
     @FXML
     protected void OnArribaClick() {
@@ -92,4 +106,27 @@ public class ImageControlViewController {
     protected void OnAchicarClick() {
         plantillaService.achicarFoto();
     }
+
+    @FXML
+    protected void On1_1Click(){
+        webcamService.setAspectRatio(AspectRatio.FOTO1_1);
+        plantillaService.actualizarConfig();
+        plantillaService.cambiarFotos1_1();
+    }
+
+    @FXML
+    protected void On4_3Click(){
+        webcamService.setAspectRatio(AspectRatio.FOTO4_3);
+        plantillaService.actualizarConfig();
+        plantillaService.cambiarFotos4_3();
+    }
+
+    @FXML
+    protected void On16_9Click(){
+        webcamService.setAspectRatio(AspectRatio.FOTO16_9);
+        plantillaService.actualizarConfig();
+        plantillaService.cambiarFotos16_9();
+    }
+
+
 }
