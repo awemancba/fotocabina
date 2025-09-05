@@ -121,7 +121,7 @@ public class MainViewController {
     private Button btnPlantilla;
 
     @FXML
-    Button btnFotos;
+    private Button btnFotos;
 
     @FXML
     private Button btnGuardarPlantilla;

@@ -39,27 +39,28 @@ public class EditorImagenes {
             throw new IllegalArgumentException("Aspect ratio inválido: ancho y largo deben ser mayores a cero");
         }
 
-        int height = imagen.getHeight();
-        int width = imagen.getWidth();
+        int originalHeight = imagen.getHeight();
+        int originalWidth = imagen.getWidth();
 
-        if (height > width) {
-            int nuevoLargo = (int) Math.round(width * aspectRatioWidth / aspectRatioHeight);
-            nuevoLargo = Math.min(nuevoLargo, imagen.getHeight());
+        double targetRatio = aspectRatioWidth / aspectRatioHeight;
+        double originalRatio = (double) originalWidth / originalHeight;
 
-            int y = (imagen.getHeight() - nuevoLargo) / 2;
+        int recorteWidth, recorteHeight;
+        int x, y;
 
-            return imagen.getSubimage(0, y, width, nuevoLargo);
+        if (originalRatio > targetRatio) {
+            recorteHeight = originalHeight;
+            recorteWidth = (int) Math.round(recorteHeight * targetRatio);
+            x = (originalWidth - recorteWidth) / 2;
+            y = 0;
 
         } else {
-            int nuevoAncho = (int) Math.round(height * aspectRatioWidth / aspectRatioHeight);
-
-            // Asegurarse de que el nuevo ancho no exceda el original
-            nuevoAncho = Math.min(nuevoAncho, imagen.getWidth());
-
-            int x = (imagen.getWidth() - nuevoAncho) / 2;
-
-            return imagen.getSubimage(x, 0, nuevoAncho, height);
+            recorteWidth = originalWidth;
+            recorteHeight = (int) Math.round(recorteWidth / targetRatio);
+            x = 0;
+            y = (originalHeight - recorteHeight) / 2;
         }
+        return imagen.getSubimage(x, y, recorteWidth, recorteHeight);
     }
 
     public static BufferedImage aplicarEspejoHorizontal(BufferedImage original) {
@@ -75,8 +76,8 @@ public class EditorImagenes {
         return espejo;
     }
 
-    public static BufferedImage recortar13to10(BufferedImage imagen){
-        return EditorImagenes.recortarApectRatio(imagen,13.0,10.0);
+    public static BufferedImage recortar13to10(BufferedImage imagen) {
+        return EditorImagenes.recortarApectRatio(imagen, 13.0, 10.0);
     }
 
     public void cambiarPosicion(double dx, double dy) {
