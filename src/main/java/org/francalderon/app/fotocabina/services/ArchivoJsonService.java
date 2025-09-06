@@ -95,6 +95,7 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
             plantillaDTO = new PlantillaDTO();
             plantillaDTO.setUbicacionFondo(Objects.requireNonNull(getClass().getResource("/img/fondoDefault.jpg")).toExternalForm());
             plantillaDTO.setTamanioPlantilla("10x15");
+            plantillaDTO.setAspectRatio(AspectRatio.FOTO4_3);
 
             List<FotoDTO> fotosDTO = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
