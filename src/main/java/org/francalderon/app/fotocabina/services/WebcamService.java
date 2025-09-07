@@ -32,7 +32,7 @@ public class WebcamService {
     private Plantilla plantilla;
     private ImageView icono;
     private Label countDown;
-    private AspectRatio aspectRatio;
+    private AspectRatio aspectRatio = AspectRatio.FOTO4_3;
 
     public WebcamService(int width, int height, Plantilla plantilla) {
         this.plantilla = plantilla;
@@ -59,10 +59,11 @@ public class WebcamService {
             while (running) {
                 BufferedImage original = webcam.getImage();
                 if (original != null) {
-                    BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(original);
-                    BufferedImage recortado = EditorImagenes.recortarApectRatio(mirrored, aspectRatio);
-                    Image fxImage = SwingFXUtils.toFXImage(recortado, null);
-                    Image fxImage2 = SwingFXUtils.toFXImage(recortado, null);
+
+                    BufferedImage recortado = EditorImagenes.recortarApectRatio(original, aspectRatio);
+                    BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(recortado);
+                    Image fxImage = SwingFXUtils.toFXImage(mirrored, null);
+                    Image fxImage2 = SwingFXUtils.toFXImage(mirrored, null);
                     Platform.runLater(() -> {
                         imageView.setImage(fxImage);
                         miniPreview.setImage(fxImage2);
