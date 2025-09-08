@@ -45,6 +45,7 @@ public class WebcamService {
 
         imageView = new ImageView();
         miniPreview = new ImageView();
+
         for (Dimension d : webcam.getViewSizes()) {
             System.out.println("Resolución disponible: " + d.width + "x" + d.height);
         }
@@ -178,9 +179,10 @@ public class WebcamService {
                 }
 
                 BufferedImage imagen = webcam.getImage();
-                BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(imagen);
-                BufferedImage recortado = EditorImagenes.recortarApectRatio(mirrored, aspectRatio);
-                fotos.add(recortado);
+                BufferedImage recortado = EditorImagenes.recortarApectRatio(imagen, aspectRatio);
+                BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(recortado);
+
+                fotos.add(mirrored);
             }
             this.plantilla.setGaleria(fotos);
             Platform.runLater(() -> {
