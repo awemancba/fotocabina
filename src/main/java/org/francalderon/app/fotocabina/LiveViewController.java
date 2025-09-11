@@ -1,6 +1,9 @@
 package org.francalderon.app.fotocabina;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -31,6 +34,7 @@ public class LiveViewController {
     public void initialize() throws IOException {
         ServiceManager serviceManager = ServiceManager.getInstance();
         webcamService = serviceManager.getWebcamService();
+
         webcamService.setCountDownLabel(temporizador);
         webcamService.setImageView(imageLive);
         imageLive.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
@@ -41,6 +45,9 @@ public class LiveViewController {
             Stage stage = (Stage) imageLive.getScene().getWindow();
             FullScreen.activar(scene, stage, imageLive);
 
+            DoubleProperty fontSize = new SimpleDoubleProperty();
+            fontSize.bind(imageLive.getScene().widthProperty().multiply(0.182));
+            temporizador.styleProperty().bind(Bindings.concat("-fx-font-size: ", fontSize.asString(), ";"));
         });
     }
 }

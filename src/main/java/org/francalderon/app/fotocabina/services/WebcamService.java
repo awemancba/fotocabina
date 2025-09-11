@@ -64,10 +64,12 @@ public class WebcamService {
                     BufferedImage recortado = EditorImagenes.recortarApectRatio(original, aspectRatio);
                     BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(recortado);
                     Image fxImage = SwingFXUtils.toFXImage(mirrored, null);
-                    Image fxImage2 = SwingFXUtils.toFXImage(mirrored, null);
                     Platform.runLater(() -> {
                         imageView.setImage(fxImage);
-                        miniPreview.setImage(fxImage2);
+
+                        if (miniPreview.isVisible()){
+                            miniPreview.setImage(fxImage);
+                        }
                     });
                 }
                 try {

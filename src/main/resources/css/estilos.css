@@ -111,3 +111,13 @@
     -fx-background-color: #E0E0E0;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.4, 0, 3);
 }
+
+.texto-blanco{
+    -fx-text-fill: white;
+}
+
+.font-label{
+    -fx-font-family: "Roboto";
+    -fx-font-size: 350px;
+    -fx-font-weight: bold;
+}

@@ -102,6 +102,9 @@ public class MainViewController {
     }
 
     @FXML
+    private CheckBox hidePreview;
+
+    @FXML
     private GridPane botones;
 
     @FXML
@@ -204,8 +207,24 @@ public class MainViewController {
     }
 
     @FXML
-    protected void OnEstirarVivoClick(){
+    protected void onEstirarVivoClick(){
 
+    }
+
+    @FXML
+    protected void onHidePreviewClick(){
+        if (hidePreview.isSelected()){
+            imageMiniPreview.imageProperty().unbind();
+            imageMiniPreview.setImage(null);
+            imageMiniPreview.setVisible(false);
+            imageMiniPreview.setManaged(false);
+            webcamService.getMiniPreview().setVisible(false);
+        } else {
+            imageMiniPreview.imageProperty().bind(webcamService.getMiniPreview().imageProperty());
+            imageMiniPreview.setVisible(true);
+            imageMiniPreview.setManaged(true);
+            webcamService.getMiniPreview().setVisible(true);
+        }
     }
 
     private Stage obtenerStage() {

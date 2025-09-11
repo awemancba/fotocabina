@@ -29,12 +29,17 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </CheckBox>
-                        <CheckBox fx:id="estirarVivo" layoutX="10.0" layoutY="30.0" mnemonicParsing="false" onAction="#OnEstirarVivoClick" text="Estirar vivo">
+                        <CheckBox fx:id="estirarVivo" layoutX="10.0" layoutY="30.0" mnemonicParsing="false" onAction="#onEstirarVivoClick" text="Estirar vivo">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </CheckBox>
                         <CheckBox layoutX="10.0" layoutY="30.0" mnemonicParsing="false" text="Bloquear plantilla">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </CheckBox>
+                        <CheckBox fx:id="hidePreview" layoutX="10.0" layoutY="30.0" mnemonicParsing="false" onAction="#onHidePreviewClick" text="Ocultar preview">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
