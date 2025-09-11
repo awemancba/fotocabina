@@ -1,6 +1,5 @@
 package org.francalderon.app.fotocabina.services;
 
-import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -8,24 +7,22 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.models.PlantillaDTO;
+import org.francalderon.app.fotocabina.models.ConfigDTO;
 import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.ui.events.foto.AsignadorEventosFoto;
 import org.francalderon.app.fotocabina.utils.AdminVentanas;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
-import org.francalderon.app.fotocabina.utils.SelectorArchivo;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class PlantillaService {
     private Plantilla plantilla;
     private EditorImagenes editorImagenes;
-    private ArchivoService<PlantillaDTO> archivoService;
+    private ArchivoService<ConfigDTO> archivoService;
     private WebcamService webcamService;
 
 
@@ -40,7 +37,7 @@ public class PlantillaService {
         this.editorImagenes = editorImagenes;
     }
 
-    public void setArchivoService(ArchivoService<PlantillaDTO> archivoService) {
+    public void setArchivoService(ArchivoService<ConfigDTO> archivoService) {
         this.archivoService = archivoService;
     }
 
@@ -141,7 +138,6 @@ public class PlantillaService {
                         .ifPresent(imageView -> ((ImageView)imageView).setFitWidth(((ImageView)imageView).getFitHeight() * (16.0 / 9))));
     }
 
-
     public void agregarFoto() {
         int numeroFoto = plantilla.getGaleria().size();
         StackPane nuevaFoto = crearFotoDefault(numeroFoto);
@@ -200,7 +196,7 @@ public class PlantillaService {
     }
 
     StackPane crearFotoDefault(int numeroImagen) {
-        ImageView foto = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/img/fotoDefault.jpg")).toExternalForm()));
+        ImageView foto = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/img/fotoDefault.png")).toExternalForm()));
 
         AspectRatio aspectRatio = webcamService.getAspectRatio();
         foto.setFitHeight(200);

@@ -1,9 +1,7 @@
 package org.francalderon.app.fotocabina.services;
 
 import com.github.sarxos.webcam.Webcam;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javafx.application.Platform;
@@ -12,12 +10,13 @@ import javafx.util.Duration;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import javafx.scene.control.Label;
 import org.francalderon.app.fotocabina.models.enums.AspectRatio;
-import org.francalderon.app.fotocabina.ui.events.foto.DesactivarNodo;
+import org.francalderon.app.fotocabina.ui.events.foto.activarDesactivarNodo;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 import org.francalderon.app.fotocabina.utils.ExportarPlantilla;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,10 +31,16 @@ public class WebcamService {
     private Plantilla plantilla;
     private ImageView icono;
     private Label countDown;
+    private int tiempo;
     private AspectRatio aspectRatio = AspectRatio.FOTO4_3;
+    private boolean modoEspejo;
 
     public WebcamService(int width, int height, Plantilla plantilla) {
         this.plantilla = plantilla;
+
+        tiempo = 3;
+        modoEspejo = false;
+
         icono = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/img/icono.png")).toExternalForm()));
         icono.setFitHeight(500);
         icono.setPreserveRatio(true);
@@ -60,15 +65,11 @@ public class WebcamService {
             while (running) {
                 BufferedImage original = webcam.getImage();
                 if (original != null) {
-
-                    BufferedImage recortado = EditorImagenes.recortarApectRatio(original, aspectRatio);
-                    BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(recortado);
-                    Image fxImage = SwingFXUtils.toFXImage(mirrored, null);
+                    Image imagenProcesada = procesarImagen(original);
                     Platform.runLater(() -> {
-                        imageView.setImage(fxImage);
-
-                        if (miniPreview.isVisible()){
-                            miniPreview.setImage(fxImage);
+                        imageView.setImage(imagenProcesada);
+                        if (miniPreview.isVisible()) {
+                            miniPreview.setImage(imagenProcesada);
                         }
                     });
                 }
@@ -98,24 +99,12 @@ public class WebcamService {
         this.imageView = imageView;
     }
 
-    public ImageView getImageView() {
-        return imageView;
-    }
-
     public ImageView getMiniPreview() {
         return miniPreview;
     }
 
-    public Label getCountDownLabel() {
-        return countDown;
-    }
-
     public void setCountDownLabel(Label countDownLabel) {
         this.countDown = countDownLabel;
-    }
-
-    public void setIcono(ImageView imageView) {
-        this.icono = imageView;
     }
 
     public ImageView getIcono() {
@@ -134,68 +123,104 @@ public class WebcamService {
         return running;
     }
 
-    public void temporizador(double tiempo, Runnable cuandoTermina) {
-        int[] temporizador = {3};
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0), e -> countDown.setText("Preparense")
-                        , new KeyValue(countDown.opacityProperty(), 1.0)),
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
+    }
 
-                new KeyFrame(Duration.seconds(tiempo), temp0 -> countDown.setText(""), new KeyValue(countDown.opacityProperty(), 0.0)),
-
-                new KeyFrame(Duration.seconds(tiempo + 1), e -> {
-                    Timeline timeLineInterno = new Timeline(
-                            new KeyFrame(Duration.seconds(0), temp -> {
-                                if (temporizador[0] > 0) {
-                                    countDown.setText(String.valueOf(temporizador[0]));
-                                    temporizador[0]--;
-                                } else {
-                                    countDown.setText("");
-                                    countDown.setGraphic(icono);
-                                }
-                            }),
-                            new KeyFrame(Duration.seconds(1), new KeyValue(countDown.opacityProperty(), 1.0)),
-                            new KeyFrame(Duration.seconds(2), new KeyValue(countDown.opacityProperty(), 0.0))
-                    );
-                    timeLineInterno.setCycleCount(4);
-                    timeLineInterno.setOnFinished(action2 -> countDown.setGraphic(null));
-                    timeLineInterno.play();
-                }),
-                new KeyFrame(Duration.seconds(tiempo + 9), new KeyValue(countDown.opacityProperty(), 1.0))
-        );
-        timeline.setOnFinished(action -> cuandoTermina.run());
-        timeline.setCycleCount(1);
-        timeline.play();
+    public void setModoEspejo(boolean modoEspejo) {
+        this.modoEspejo = modoEspejo;
     }
 
     public void tomarFotosConTemporizador() {
         int cantidadFotos = plantilla.getGaleria().size();
-        List<BufferedImage> fotos = new ArrayList<>();
+        List<Image> fotos = new ArrayList<>();
         new Thread(() -> {
             for (int i = 0; i < cantidadFotos; i++) {
                 CountDownLatch latch = new CountDownLatch(1);
-                Platform.runLater(() -> temporizador(5, latch::countDown));
+                Platform.runLater(() -> temporizador(latch::countDown));
                 try {
                     latch.await(); // Espera a que termine la animación
                 } catch (InterruptedException e) {
                     throw new RuntimeException();
                 }
-
-                BufferedImage imagen = webcam.getImage();
-                BufferedImage recortado = EditorImagenes.recortarApectRatio(imagen, aspectRatio);
-                BufferedImage mirrored = EditorImagenes.aplicarEspejoHorizontal(recortado);
-
-                fotos.add(mirrored);
+                fotos.add(imageView.getImage());
             }
             this.plantilla.setGaleria(fotos);
+
             Platform.runLater(() -> {
-                DesactivarNodo.texto(plantilla.getGaleria());
+                activarDesactivarNodo.textOff(plantilla.getGaleria());
                 ExportarPlantilla.guardarComoPNG(plantilla);
+                activarDesactivarNodo.textOn(plantilla.getGaleria());
                 countDown.setOpacity(1.0);
                 countDown.setText("Bienvenido");
             });
-
         }).start();
+    }
 
+
+    public void temporizador(Runnable cuandoTermina) {
+        // Mostrar mensaje inicial
+        countDown.setText("Preparense");
+        countDown.setOpacity(1.0);
+
+        // Transición de preparación
+        FadeTransition preparacion = new FadeTransition(Duration.seconds(tiempo),countDown);
+        preparacion.setFromValue(1.0);
+        preparacion.setToValue(0.0);
+        preparacion.setOnFinished(e -> {
+            countDown.setText("");
+            iniciarCuentaRegresiva(cuandoTermina);
+        });
+
+        preparacion.play();
+    }
+
+    private void iniciarCuentaRegresiva(Runnable cuandoTermina) {
+        SequentialTransition secuencia = new SequentialTransition();
+
+        // Conteo regresivo: 3, 2, 1
+        for (int i = 3; i > 0; i--) {
+            int numero = i;
+
+            PauseTransition mostrarNumero = new PauseTransition(Duration.seconds(0.1));
+            mostrarNumero.setOnFinished(e -> {
+                countDown.setText(String.valueOf(numero));
+                countDown.setOpacity(1.0);
+            });
+
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.9), countDown);
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+
+            secuencia.getChildren().addAll(mostrarNumero, fadeOut);
+        }
+
+        // Mostrar ícono final
+        PauseTransition mostrarIcono = new PauseTransition(Duration.seconds(0.1));
+        mostrarIcono.setOnFinished(e -> {
+            countDown.setText("");
+            countDown.setGraphic(icono);
+            countDown.setOpacity(1.0);
+        });
+
+        FadeTransition ocultarIcono = new FadeTransition(Duration.seconds(1), countDown);
+        ocultarIcono.setFromValue(1.0);
+        ocultarIcono.setToValue(0.0);
+        ocultarIcono.setOnFinished(e -> {
+            countDown.setGraphic(null);
+            cuandoTermina.run();
+        });
+
+        secuencia.getChildren().addAll(mostrarIcono, ocultarIcono);
+        secuencia.play();
+    }
+
+    private Image procesarImagen(BufferedImage original) {
+        BufferedImage recortado = EditorImagenes.recortarApectRatio(original, aspectRatio);
+        if (modoEspejo) {
+            recortado = EditorImagenes.aplicarEspejoHorizontal(recortado);
+        }
+        return SwingFXUtils.toFXImage(recortado, null);
     }
 
 

@@ -48,6 +48,7 @@ public class LiveViewController {
             DoubleProperty fontSize = new SimpleDoubleProperty();
             fontSize.bind(imageLive.getScene().widthProperty().multiply(0.182));
             temporizador.styleProperty().bind(Bindings.concat("-fx-font-size: ", fontSize.asString(), ";"));
+            webcamService.getIcono().fitHeightProperty().bind(imageLive.getScene().widthProperty().multiply(0.26));
         });
     }
 }

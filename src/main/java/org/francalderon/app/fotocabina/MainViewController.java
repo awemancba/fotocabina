@@ -7,13 +7,14 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.models.PlantillaDTO;
+import org.francalderon.app.fotocabina.models.ConfigDTO;
 import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.services.ServiceManager;
 import org.francalderon.app.fotocabina.services.WebcamService;
@@ -21,7 +22,6 @@ import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.ui.events.foto.EliminarComponente;
 import org.francalderon.app.fotocabina.utils.*;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ public class MainViewController {
     @FXML
     Plantilla plantilla;
     EditorImagenes editorImagenes;
-    ArchivoService<PlantillaDTO> archivoService;
+    ArchivoService<ConfigDTO> archivoService;
     PlantillaService plantillaService;
     WebcamService webcamService;
 
@@ -72,7 +72,6 @@ public class MainViewController {
                     AdminVentanas.getVentanaVivo().close();
                 }
             });
-
         });
 
     }
@@ -100,6 +99,9 @@ public class MainViewController {
             nodo.getStyleClass().add("color-primario");
         }
     }
+
+    @FXML
+    private CheckBox modoEspejo;
 
     @FXML
     private CheckBox hidePreview;
@@ -156,13 +158,23 @@ public class MainViewController {
     private StackPane contenedorMiniPreview;
 
     @FXML
+    private TextField tiempoTemp;
+
+    //Botones
+
+    @FXML
     protected void onOpenLiveClick() throws IOException {
         AdminVentanas.toggleLiveWindow(openLive);
     }
 
     @FXML
     protected void onCapturaClick() {
-        webcamService.tomarFotosConTemporizador();
+        if (AdminVentanas.getVentanaVivo() != null){
+            webcamService.tomarFotosConTemporizador();
+        } else {
+            System.out.println("Por favor abra la ventana en vivo");
+        }
+
     }
 
     @FXML
@@ -225,6 +237,16 @@ public class MainViewController {
             imageMiniPreview.setManaged(true);
             webcamService.getMiniPreview().setVisible(true);
         }
+    }
+
+    @FXML
+    protected void onTiempoTemp(){
+        webcamService.setTiempo(Integer.parseInt(tiempoTemp.getText()));
+    }
+
+    @FXML
+    protected void onModoEspejoClick(){
+        webcamService.setModoEspejo(modoEspejo.isSelected());
     }
 
     private Stage obtenerStage() {

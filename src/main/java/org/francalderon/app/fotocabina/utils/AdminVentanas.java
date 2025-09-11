@@ -1,10 +1,12 @@
 package org.francalderon.app.fotocabina.utils;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,7 +14,7 @@ import java.io.IOException;
 public class AdminVentanas {
     private static Stage ventanaVivo;
     private static Stage plantillaView;
-    private static Stage imgaeControl;
+    private static Stage imageControl;
     private static Stage primaryStage;
 
     public static void toggleLiveWindow(CheckBox checkBox) throws IOException {
@@ -20,8 +22,10 @@ public class AdminVentanas {
             if (ventanaVivo == null || !ventanaVivo.isShowing()) {
                 FXMLLoader loader = new FXMLLoader(AdminVentanas.class.getResource("/fxml/LiveView.fxml"));
                 Parent root = loader.load();
+                Rectangle2D monitor = Screen.getPrimary().getVisualBounds();
                 ventanaVivo = new Stage();
                 ventanaVivo.setScene(new Scene(root));
+                ventanaVivo.setWidth(monitor.getWidth());
                 ventanaVivo.setTitle("Vivo");
                 ventanaVivo.setAlwaysOnTop(true);
                 ventanaVivo.setOnCloseRequest(e -> {
@@ -58,20 +62,20 @@ public class AdminVentanas {
     }
 
     public static void imageControlView(Stage stage) throws IOException {
-        if (imgaeControl == null || !imgaeControl.isShowing()) {
+        if (imageControl == null || !imageControl.isShowing()) {
             FXMLLoader loader = new FXMLLoader(AdminVentanas.class.getResource("/fxml/ImageControlView.fxml"));
             Parent root = loader.load();
 
-            imgaeControl = new Stage();
-            imgaeControl.setTitle("Controles Imagen");
-            imgaeControl.initOwner(stage);
-            imgaeControl.initModality(Modality.NONE);
-            imgaeControl.setAlwaysOnTop(true);
-            imgaeControl.setScene(new Scene(root));
-            imgaeControl.show();
+            imageControl = new Stage();
+            imageControl.setTitle("Controles Imagen");
+            imageControl.initOwner(stage);
+            imageControl.initModality(Modality.NONE);
+            imageControl.setAlwaysOnTop(true);
+            imageControl.setScene(new Scene(root));
+            imageControl.show();
         } else {
-            imgaeControl.close();
-            imgaeControl = null;
+            imageControl.close();
+            imageControl = null;
         }
     }
 

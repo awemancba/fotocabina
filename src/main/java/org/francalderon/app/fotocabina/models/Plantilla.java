@@ -70,12 +70,12 @@ public class Plantilla extends Pane {
         return galeria;
     }
 
-    public void setGaleria(List<BufferedImage> fotos) {
+    public void setGaleria(List<Image> fotos) {
         for (int i = 0; i < fotos.size(); i++) {
             StackPane stackPane = this.galeria.get(i);
             for (Node nodo : stackPane.getChildren()) {
                 if (nodo instanceof ImageView) {
-                    ((ImageView) nodo).setImage(SwingFXUtils.toFXImage(fotos.get(i), null));
+                    ((ImageView) nodo).setImage(fotos.get(i));
                 }
             }
         }

@@ -4,13 +4,14 @@ import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 
 import java.util.List;
 
-public class PlantillaDTO {
+public class ConfigDTO {
     private String tamanioPlantilla;
     private String ubicacionFondo;
     private AspectRatio aspectRatio;
+    private String ubicacionCapturador;
     private List<FotoDTO> fotos;
 
-    public PlantillaDTO() {
+    public ConfigDTO() {
     }
 
     public String getTamanioPlantilla() {
@@ -43,5 +44,13 @@ public class PlantillaDTO {
 
     public AspectRatio getAspectRatio() {
         return aspectRatio;
+    }
+
+    public String getUbicacionCapturador() {
+        return ubicacionCapturador;
+    }
+
+    public void setUbicacionCapturador(String ubicacionCapturador) {
+        this.ubicacionCapturador = ubicacionCapturador;
     }
 }

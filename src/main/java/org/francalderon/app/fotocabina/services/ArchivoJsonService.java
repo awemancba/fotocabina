@@ -9,7 +9,7 @@ import javafx.scene.layout.StackPane;
 import org.francalderon.app.fotocabina.models.BaseArchivoService;
 import org.francalderon.app.fotocabina.models.FotoDTO;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.models.PlantillaDTO;
+import org.francalderon.app.fotocabina.models.ConfigDTO;
 import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.ui.events.foto.AsignadorEventosFoto;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ArchivoJsonService extends BaseArchivoService implements ArchivoService<PlantillaDTO> {
+public class ArchivoJsonService extends BaseArchivoService implements ArchivoService<ConfigDTO> {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -38,7 +38,7 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
     }
 
     @Override
-    public void crearArchivo(String nombre, PlantillaDTO contenido) {
+    public void crearArchivo(String nombre, ConfigDTO contenido) {
         try {
             mapper.writeValue(new File(nombre), contenido);
         } catch (IOException e) {
@@ -47,9 +47,9 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
     }
 
     @Override
-    public PlantillaDTO leerArchivo(File archivo) {
+    public ConfigDTO leerArchivo(File archivo) {
         try {
-            return mapper.readValue(archivo, PlantillaDTO.class);
+            return mapper.readValue(archivo, ConfigDTO.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,13 +62,13 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
 
     @Override
     public void actualizarConfig() {
-        PlantillaDTO plantillaDTO = new PlantillaDTO();
+        ConfigDTO configDTO = new ConfigDTO();
         List<FotoDTO> fotosDTO = new ArrayList<>();
         List<StackPane> fotos = plantilla.getGaleria();
 
-        plantillaDTO.setTamanioPlantilla(plantilla.getTamanioFoto().getNombre());
-        plantillaDTO.setUbicacionFondo(plantilla.getFondo().getImage().getUrl());
-        plantillaDTO.setAspectRatio(plantillaService.getWebcamService().getAspectRatio());
+        configDTO.setTamanioPlantilla(plantilla.getTamanioFoto().getNombre());
+        configDTO.setUbicacionFondo(plantilla.getFondo().getImage().getUrl());
+        configDTO.setAspectRatio(plantillaService.getWebcamService().getAspectRatio());
 
         for (StackPane foto : fotos) {
             for (Node nodo : foto.getChildren()) {
@@ -81,21 +81,21 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
                 }
             }
         }
-        plantillaDTO.setFotos(fotosDTO);
+        configDTO.setFotos(fotosDTO);
 
-        crearArchivo(Plantilla.CONFIGURACION_JSON, plantillaDTO);
+        crearArchivo(Plantilla.CONFIGURACION_JSON, configDTO);
 
     }
 
     @Override
     public void cargarConfig(File archivo) {
-        PlantillaDTO plantillaDTO;
+        ConfigDTO configDTO;
 
         if (archivo.length() == 0) {
-            plantillaDTO = new PlantillaDTO();
-            plantillaDTO.setUbicacionFondo(Objects.requireNonNull(getClass().getResource("/img/fondoDefault.jpg")).toExternalForm());
-            plantillaDTO.setTamanioPlantilla("10x15");
-            plantillaDTO.setAspectRatio(AspectRatio.FOTO4_3);
+            configDTO = new ConfigDTO();
+            configDTO.setUbicacionFondo(Objects.requireNonNull(getClass().getResource("/img/fondoDefault.jpg")).toExternalForm());
+            configDTO.setTamanioPlantilla("10x15");
+            configDTO.setAspectRatio(AspectRatio.FOTO4_3);
 
             List<FotoDTO> fotosDTO = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
@@ -105,15 +105,15 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
                 foto.setY(200 * (i + 1));
                 fotosDTO.add(foto);
             }
-            plantillaDTO.setFotos(fotosDTO);
+            configDTO.setFotos(fotosDTO);
         } else {
-            plantillaDTO = leerArchivo(archivo);
+            configDTO = leerArchivo(archivo);
         }
 
-        AspectRatio aspectRatio = plantillaDTO.getAspectRatio();
-        String tamanio = plantillaDTO.getTamanioPlantilla();
-        String fondo = plantillaDTO.getUbicacionFondo();
-        List<FotoDTO> fotos = plantillaDTO.getFotos();
+        AspectRatio aspectRatio = configDTO.getAspectRatio();
+        String tamanio = configDTO.getTamanioPlantilla();
+        String fondo = configDTO.getUbicacionFondo();
+        List<FotoDTO> fotos = configDTO.getFotos();
 
         webcamService.setAspectRatio(aspectRatio);
         plantilla.getFondo().setImage(new Image(fondo));

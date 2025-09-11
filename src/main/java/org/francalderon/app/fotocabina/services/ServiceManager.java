@@ -2,18 +2,17 @@ package org.francalderon.app.fotocabina.services;
 
 import org.francalderon.app.fotocabina.models.BaseArchivoService;
 import org.francalderon.app.fotocabina.models.Plantilla;
-import org.francalderon.app.fotocabina.models.PlantillaDTO;
+import org.francalderon.app.fotocabina.models.ConfigDTO;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 
 import java.io.IOException;
-import java.util.List;
 
 public class ServiceManager {
     private static ServiceManager instance;
 
     private final EditorImagenes editorImagenes;
-    private final ArchivoService<PlantillaDTO> archivoService;
+    private final ArchivoService<ConfigDTO> archivoService;
     private final PlantillaService plantillaService;
     private final Plantilla plantilla;
     private final WebcamService webcamService;
@@ -36,8 +35,6 @@ public class ServiceManager {
         plantilla.setPlantillaService(plantillaService);
         plantilla.setEditorImagenes(editorImagenes);
 
-
-
     }
 
     public void iniciarServicios() {
@@ -59,7 +56,7 @@ public class ServiceManager {
         return editorImagenes;
     }
 
-    public ArchivoService<PlantillaDTO> getArchivoService() {
+    public ArchivoService<ConfigDTO> getArchivoService() {
         return archivoService;
     }
 
