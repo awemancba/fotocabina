@@ -12,6 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.services.ServiceManager;
+import org.francalderon.app.fotocabina.services.WebCamServiceSocket;
 import org.francalderon.app.fotocabina.services.WebcamService;
 import org.francalderon.app.fotocabina.utils.FullScreen;
 
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class LiveViewController {
     @FXML
     WebcamService webcamService;
+    WebCamServiceSocket webCamServiceSocket;
 
     @FXML
     StackPane contenedorLive;
@@ -34,9 +36,11 @@ public class LiveViewController {
     public void initialize() throws IOException {
         ServiceManager serviceManager = ServiceManager.getInstance();
         webcamService = serviceManager.getWebcamService();
+        webCamServiceSocket = serviceManager.getWebCamServiceSocket();
+        webCamServiceSocket.setImageView(imageLive);
 
         webcamService.setCountDownLabel(temporizador);
-        webcamService.setImageView(imageLive);
+        //webcamService.setImageView(imageLive);
         imageLive.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
         imageLive.setFitWidth(Screen.getPrimary().getVisualBounds().getWidth());
 
