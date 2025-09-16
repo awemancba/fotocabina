@@ -13,7 +13,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.services.ServiceManager;
 import org.francalderon.app.fotocabina.services.WebCamServiceSocket;
-import org.francalderon.app.fotocabina.services.WebcamService;
+import org.francalderon.app.fotocabina.services.WebcamServiceLocal;
+import org.francalderon.app.fotocabina.services.interfaces.WebcamService;
 import org.francalderon.app.fotocabina.utils.FullScreen;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class LiveViewController {
         webCamServiceSocket = serviceManager.getWebCamServiceSocket();
         webCamServiceSocket.setImageView(imageLive);
 
-        webcamService.setCountDownLabel(temporizador);
+        webcamService.getTemporizador().setCountDown(temporizador);
         //webcamService.setImageView(imageLive);
         imageLive.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
         imageLive.setFitWidth(Screen.getPrimary().getVisualBounds().getWidth());
@@ -52,7 +53,7 @@ public class LiveViewController {
             DoubleProperty fontSize = new SimpleDoubleProperty();
             fontSize.bind(imageLive.getScene().widthProperty().multiply(0.182));
             temporizador.styleProperty().bind(Bindings.concat("-fx-font-size: ", fontSize.asString(), ";"));
-            webcamService.getIcono().fitHeightProperty().bind(imageLive.getScene().widthProperty().multiply(0.26));
+            webcamService.getTemporizador().getIcono().fitHeightProperty().bind(imageLive.getScene().widthProperty().multiply(0.26));
         });
     }
 }

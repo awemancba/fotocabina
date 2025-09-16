@@ -17,8 +17,10 @@ import org.francalderon.app.fotocabina.models.Plantilla;
 import org.francalderon.app.fotocabina.models.ConfigDTO;
 import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.services.ServiceManager;
-import org.francalderon.app.fotocabina.services.WebcamService;
+import org.francalderon.app.fotocabina.services.WebCamServiceSocket;
+import org.francalderon.app.fotocabina.services.WebcamServiceLocal;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
+import org.francalderon.app.fotocabina.services.interfaces.WebcamService;
 import org.francalderon.app.fotocabina.ui.events.foto.EliminarComponente;
 import org.francalderon.app.fotocabina.utils.*;
 
@@ -32,6 +34,7 @@ public class MainViewController {
     ArchivoService<ConfigDTO> archivoService;
     PlantillaService plantillaService;
     WebcamService webcamService;
+    WebCamServiceSocket webCamServiceSocket;
 
     public void initialize() throws IOException {
         ServiceManager serviceManager = ServiceManager.getInstance();
@@ -40,6 +43,8 @@ public class MainViewController {
         archivoService = serviceManager.getArchivoService();
         plantillaService = serviceManager.getPlantillaService();
         webcamService = serviceManager.getWebcamService();
+        webCamServiceSocket = serviceManager.getWebCamServiceSocket();
+
         serviceManager.iniciarServicios();
 
         File archivo = new File(Plantilla.CONFIGURACION_JSON);
@@ -68,6 +73,7 @@ public class MainViewController {
             EliminarComponente.foto(stage, scene, plantillaService);
             obtenerStage().setOnCloseRequest(e -> {
                 webcamService.stop();
+                webCamServiceSocket.stopServer();
                 if (AdminVentanas.getVentanaVivo() != null) {
                     AdminVentanas.getVentanaVivo().close();
                 }
@@ -169,11 +175,13 @@ public class MainViewController {
 
     @FXML
     protected void onCapturaClick() {
-        if (AdminVentanas.getVentanaVivo() != null){
+        webCamServiceSocket.sendCommand("START_CAPTURE\n");
+
+        /*if (AdminVentanas.getVentanaVivo() != null){
             webcamService.tomarFotosConTemporizador();
         } else {
             System.out.println("Por favor abra la ventana en vivo");
-        }
+        }*/
 
     }
 
@@ -212,7 +220,7 @@ public class MainViewController {
         Stage stage = (Stage) btnAjustes.getScene().getWindow();
         Image nuevoIcono = SelectorArchivo.seleccionarImagen(stage);
         if (nuevoIcono != null) {
-            webcamService.getIcono().setImage(nuevoIcono);
+            webcamService.getTemporizador().getIcono().setImage(nuevoIcono);
         } else {
             System.out.println("No se puede cargar la imagen");
         }
@@ -241,7 +249,7 @@ public class MainViewController {
 
     @FXML
     protected void onTiempoTemp(){
-        webcamService.setTiempo(Integer.parseInt(tiempoTemp.getText()));
+        webcamService.getTemporizador().setTiempo(Integer.parseInt(tiempoTemp.getText()));
     }
 
     @FXML

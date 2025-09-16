@@ -90,4 +90,16 @@ public class Temporizador {
     public void setIcono(ImageView icono) {
         this.icono = icono;
     }
+
+    public int getTiempo() {
+        return tiempo;
+    }
+
+    public Label getCountDown() {
+        return countDown;
+    }
+
+    public ImageView getIcono() {
+        return icono;
+    }
 }

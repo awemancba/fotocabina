@@ -7,7 +7,8 @@ import javafx.scene.control.Label;
 import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.services.ServiceManager;
-import org.francalderon.app.fotocabina.services.WebcamService;
+import org.francalderon.app.fotocabina.services.WebcamServiceLocal;
+import org.francalderon.app.fotocabina.services.interfaces.WebcamService;
 
 import java.io.IOException;
 

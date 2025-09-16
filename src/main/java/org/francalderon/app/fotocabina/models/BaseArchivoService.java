@@ -2,7 +2,8 @@ package org.francalderon.app.fotocabina.models;
 
 import javafx.stage.Stage;
 import org.francalderon.app.fotocabina.services.PlantillaService;
-import org.francalderon.app.fotocabina.services.WebcamService;
+import org.francalderon.app.fotocabina.services.WebcamServiceLocal;
+import org.francalderon.app.fotocabina.services.interfaces.WebcamService;
 import org.francalderon.app.fotocabina.utils.SelectorArchivo;
 
 import java.io.File;

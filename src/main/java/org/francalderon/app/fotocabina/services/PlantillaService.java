@@ -11,6 +11,7 @@ import org.francalderon.app.fotocabina.models.ConfigDTO;
 import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
+import org.francalderon.app.fotocabina.services.interfaces.WebcamService;
 import org.francalderon.app.fotocabina.ui.events.foto.AsignadorEventosFoto;
 import org.francalderon.app.fotocabina.utils.AdminVentanas;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;

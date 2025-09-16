@@ -4,6 +4,7 @@ import org.francalderon.app.fotocabina.models.BaseArchivoService;
 import org.francalderon.app.fotocabina.models.Plantilla;
 import org.francalderon.app.fotocabina.models.ConfigDTO;
 import org.francalderon.app.fotocabina.services.interfaces.ArchivoService;
+import org.francalderon.app.fotocabina.services.interfaces.WebcamService;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 
 import java.io.IOException;
@@ -19,12 +20,12 @@ public class ServiceManager {
     private final WebCamServiceSocket webCamServiceSocket;
 
     private ServiceManager() throws IOException {
-        webCamServiceSocket = new WebCamServiceSocket(9999);
+        webCamServiceSocket = new WebCamServiceSocket(4747);
         plantillaService = new PlantillaService();
         plantilla = new Plantilla();
         editorImagenes = new EditorImagenes();
         archivoService = new ArchivoJsonService();
-        webcamService = new WebcamService(640, 480, plantilla);
+        webcamService = new WebcamServiceLocal(640, 480, plantilla);
 
 
         editorImagenes.setPlantilla(plantilla);
@@ -37,16 +38,18 @@ public class ServiceManager {
         plantillaService.setWebcamService(webcamService);
         plantilla.setPlantillaService(plantillaService);
         plantilla.setEditorImagenes(editorImagenes);
+        webCamServiceSocket.setPlantilla(plantilla);
 
     }
 
     public void iniciarServicios() {
         webcamService.start();
-        webCamServiceSocket.starServer();
+        webCamServiceSocket.startServer();
     }
 
     public void detenerServicios() {
         webcamService.stop();
+        webCamServiceSocket.stopServer();
     }
 
     public static ServiceManager getInstance() throws IOException {
