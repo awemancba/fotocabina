@@ -15,7 +15,7 @@ public class AdminVentanas {
     private static Stage ventanaVivo;
     private static Stage plantillaView;
     private static Stage imageControl;
-    private static Stage primaryStage;
+    private static Stage mainViewController;
 
     public static void toggleLiveWindow(CheckBox checkBox) throws IOException {
         if (checkBox.isSelected()) {
@@ -87,11 +87,11 @@ public class AdminVentanas {
         return plantillaView;
     }
 
-    public static Stage getPrimaryStage() {
-        return primaryStage;
+    public static Stage getMainViewController() {
+        return mainViewController;
     }
 
-    public static void setPrimaryStage(Stage primaryStage) {
-        AdminVentanas.primaryStage = primaryStage;
+    public static void setMainViewController(Stage mainViewController) {
+        AdminVentanas.mainViewController = mainViewController;
     }
 }

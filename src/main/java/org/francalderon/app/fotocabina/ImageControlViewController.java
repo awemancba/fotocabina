@@ -1,10 +1,12 @@
 package org.francalderon.app.fotocabina;
 
+import com.sun.tools.javac.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import org.francalderon.app.fotocabina.models.enums.AspectRatio;
+import org.francalderon.app.fotocabina.services.ArchivoJsonService;
 import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.services.ServiceManager;
 import org.francalderon.app.fotocabina.services.WebcamServiceLocal;
@@ -17,10 +19,12 @@ public class ImageControlViewController {
     @FXML
     PlantillaService plantillaService;
     WebcamService webcamService;
+    ArchivoJsonService archivoJsonService;
 
     public void initialize() throws IOException {
         plantillaService = ServiceManager.getInstance().getPlantillaService();
         webcamService = ServiceManager.getInstance().getWebcamService();
+        archivoJsonService = (ArchivoJsonService) ServiceManager.getInstance().getArchivoService();
     }
 
     @FXML
@@ -109,24 +113,27 @@ public class ImageControlViewController {
     }
 
     @FXML
-    protected void On1_1Click(){
+    protected void On1_1Click() throws IOException {
         webcamService.setAspectRatio(AspectRatio.FOTO1_1);
         plantillaService.actualizarConfig();
         plantillaService.cambiarFotos1_1();
+        archivoJsonService.enviarConfig(MainViewController.ESPERA);
     }
 
     @FXML
-    protected void On4_3Click(){
+    protected void On4_3Click() throws IOException {
         webcamService.setAspectRatio(AspectRatio.FOTO4_3);
         plantillaService.actualizarConfig();
         plantillaService.cambiarFotos4_3();
+        archivoJsonService.enviarConfig(MainViewController.ESPERA);
     }
 
     @FXML
-    protected void On16_9Click(){
+    protected void On16_9Click() throws IOException {
         webcamService.setAspectRatio(AspectRatio.FOTO16_9);
         plantillaService.actualizarConfig();
         plantillaService.cambiarFotos16_9();
+        archivoJsonService.enviarConfig(MainViewController.ESPERA);
     }
 
 

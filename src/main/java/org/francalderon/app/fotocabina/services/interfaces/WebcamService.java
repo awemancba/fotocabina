@@ -15,11 +15,11 @@ public interface WebcamService {
 
     Temporizador getTemporizador();
 
+    void iniciarSecuenciaDeCaptura();
+
     void setImageView(ImageView imageLive);
 
     ImageView getMiniPreview();
-
-    void tomarFotosConTemporizador();
 
     void setModoEspejo(boolean selected);
 }

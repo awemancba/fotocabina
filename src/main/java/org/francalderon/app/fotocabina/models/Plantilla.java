@@ -1,22 +1,17 @@
 package org.francalderon.app.fotocabina.models;
 
-import com.sun.javafx.geom.Dimension;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
-import org.francalderon.app.fotocabina.models.enums.AspectRatio;
 import org.francalderon.app.fotocabina.models.enums.TamanioFoto;
 import org.francalderon.app.fotocabina.services.PlantillaService;
 import org.francalderon.app.fotocabina.utils.EditorImagenes;
 import org.francalderon.app.fotocabina.utils.EscaladorProporcional;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +20,6 @@ import java.util.Objects;
 public class Plantilla extends Pane {
     private ImageView fondo;
     private List<StackPane> galeria = new ArrayList<>();
-    private List<Label> textos = new ArrayList<>();
     private int imgSelected = 0;
     private EditorImagenes editorImagenes;
     private PlantillaService plantillaService;
@@ -117,6 +111,4 @@ public class Plantilla extends Pane {
         this.getChildren().remove(selected());
         this.galeria.remove(selected());
     }
-
-
 }

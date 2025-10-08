@@ -20,14 +20,16 @@ public class ServiceManager {
     private final WebCamServiceSocket webCamServiceSocket;
 
     private ServiceManager() throws IOException {
-        webCamServiceSocket = new WebCamServiceSocket(4747);
         plantillaService = new PlantillaService();
         plantilla = new Plantilla();
         editorImagenes = new EditorImagenes();
         archivoService = new ArchivoJsonService();
-        webcamService = new WebcamServiceLocal(640, 480, plantilla);
+        webcamService = new WebcamServiceLocal(plantilla);
+        webCamServiceSocket = new WebCamServiceSocket(4747);
+        webcamService.start();
 
 
+        webCamServiceSocket.setPlantilla(plantilla);
         editorImagenes.setPlantilla(plantilla);
         ((BaseArchivoService) archivoService).setPlantilla(plantilla);
         ((BaseArchivoService) archivoService).setPlantillaService(plantillaService);
@@ -38,18 +40,6 @@ public class ServiceManager {
         plantillaService.setWebcamService(webcamService);
         plantilla.setPlantillaService(plantillaService);
         plantilla.setEditorImagenes(editorImagenes);
-        webCamServiceSocket.setPlantilla(plantilla);
-
-    }
-
-    public void iniciarServicios() {
-        webcamService.start();
-        webCamServiceSocket.startServer();
-    }
-
-    public void detenerServicios() {
-        webcamService.stop();
-        webCamServiceSocket.stopServer();
     }
 
     public static ServiceManager getInstance() throws IOException {
@@ -79,7 +69,7 @@ public class ServiceManager {
         return webcamService;
     }
 
-    public WebCamServiceSocket getWebCamServiceSocket() {
+    public WebCamServiceSocket getWebCamServiceSocket(){
         return webCamServiceSocket;
     }
 }

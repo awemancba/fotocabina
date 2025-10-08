@@ -1,5 +1,6 @@
 package org.francalderon.app.fotocabina.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -55,9 +56,18 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
         }
     }
 
+    public String convertirStringJson(ConfigDTO configDTO) {
+        try {
+            return mapper.writeValueAsString(configDTO);
+        } catch (JsonProcessingException e){
+            System.out.println("Error al convertir Json a String" + e.getMessage());
+        }
+        return null;
+    }
+
     @Override
     public void guardarConfig() {
-        GuardadorArchivo.plantillaJson(AdminVentanas.getPrimaryStage());
+        GuardadorArchivo.plantillaJson(AdminVentanas.getMainViewController());
     }
 
     @Override
@@ -69,6 +79,7 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
         configDTO.setTamanioPlantilla(plantilla.getTamanioFoto().getNombre());
         configDTO.setUbicacionFondo(plantilla.getFondo().getImage().getUrl());
         configDTO.setAspectRatio(plantillaService.getWebcamService().getAspectRatio());
+        configDTO.setTiempo(plantillaService.getWebcamService().getTemporizador().getTiempo());
 
         for (StackPane foto : fotos) {
             for (Node nodo : foto.getChildren()) {
@@ -145,7 +156,7 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
 
     @Override
     public void cargarPlantilla() {
-        File config = SelectorArchivo.seleccionarConfigJson(AdminVentanas.getPrimaryStage());
+        File config = SelectorArchivo.seleccionarConfigJson(AdminVentanas.getMainViewController());
         if (config != null) {
             plantillaService.eliminarComponentes();
             cargarConfig(config);
@@ -153,5 +164,14 @@ public class ArchivoJsonService extends BaseArchivoService implements ArchivoSer
         } else {
             System.out.println("El archivo no se cargo correctamente");
         }
+    }
+
+    public void enviarConfig(String configuracion) throws IOException {
+        ConfigDTO configDTO = leerArchivo(new File(Plantilla.CONFIGURACION_JSON));
+        configDTO.setCommand(configuracion);
+        String jsonString = convertirStringJson(configDTO);
+
+        WebCamServiceSocket webCamServiceSocket = ServiceManager.getInstance().getWebCamServiceSocket();
+        webCamServiceSocket.sendCommand(jsonString);
     }
 }

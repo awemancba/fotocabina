@@ -56,7 +56,7 @@ public class ArchivoTxtService extends BaseArchivoService implements ArchivoServ
     }
 
     public void guardarConfig() {
-        GuardadorArchivo.plantillaTxt(AdminVentanas.getPrimaryStage());
+        GuardadorArchivo.plantillaTxt(AdminVentanas.getMainViewController());
 
     }
 
@@ -145,7 +145,7 @@ public class ArchivoTxtService extends BaseArchivoService implements ArchivoServ
 
     @Override
     public void cargarPlantilla() {
-        File config = SelectorArchivo.seleccionarConfigFile(AdminVentanas.getPrimaryStage());
+        File config = SelectorArchivo.seleccionarConfigFile(AdminVentanas.getMainViewController());
         if (config!=null){
             plantillaService.eliminarComponentes();
             cargarConfig(config);

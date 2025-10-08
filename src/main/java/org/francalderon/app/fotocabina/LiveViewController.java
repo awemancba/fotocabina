@@ -23,7 +23,6 @@ import java.io.IOException;
 public class LiveViewController {
     @FXML
     WebcamService webcamService;
-    WebCamServiceSocket webCamServiceSocket;
 
     @FXML
     StackPane contenedorLive;
@@ -37,11 +36,9 @@ public class LiveViewController {
     public void initialize() throws IOException {
         ServiceManager serviceManager = ServiceManager.getInstance();
         webcamService = serviceManager.getWebcamService();
-        webCamServiceSocket = serviceManager.getWebCamServiceSocket();
-        webCamServiceSocket.setImageView(imageLive);
 
         webcamService.getTemporizador().setCountDown(temporizador);
-        //webcamService.setImageView(imageLive);
+        webcamService.setImageView(imageLive);
         imageLive.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
         imageLive.setFitWidth(Screen.getPrimary().getVisualBounds().getWidth());
 

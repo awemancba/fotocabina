@@ -8,6 +8,8 @@ public class ConfigDTO {
     private String tamanioPlantilla;
     private String ubicacionFondo;
     private AspectRatio aspectRatio;
+    private int tiempo;
+    private String command;
     private String ubicacionCapturador;
     private List<FotoDTO> fotos;
 
@@ -52,5 +54,21 @@ public class ConfigDTO {
 
     public void setUbicacionCapturador(String ubicacionCapturador) {
         this.ubicacionCapturador = ubicacionCapturador;
+    }
+
+    public int getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public String getCommand() {
+        return command;
     }
 }

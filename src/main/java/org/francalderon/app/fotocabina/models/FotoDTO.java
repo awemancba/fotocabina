@@ -2,7 +2,7 @@ package org.francalderon.app.fotocabina.models;
 
 public class FotoDTO {
     private double alto;
-    private double X;
+    private double x;
     private double y;
 
     public FotoDTO() {
@@ -17,11 +17,11 @@ public class FotoDTO {
     }
 
     public double getX() {
-        return X;
+        return x;
     }
 
     public void setX(double x) {
-        this.X = x;
+        this.x = x;
     }
 
     public double getY() {
